@@ -1,0 +1,275 @@
+#navbar-right{
+    justify-content: flex-end;
+    margin-left: 35rem;
+}
+
+#dropdown-menu{
+    margin-right: 15px;
+}
+
+#logo-text{
+     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+     font-size: 30px;
+}
+
+#search-btn{
+  background-color: #dd2c35;  
+  color: #ffffff; 
+  border-radius: 5px;
+}
+
+#signin-btn{
+  background-color: #dd2c35;  
+  color: #ffffff; 
+  border-radius: 5px;
+  width: 100%;
+}
+
+/* Style for the statistic boxes */
+.stat-box {
+  border: 1px solid #ddd;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Placeholder SVG styling (you can replace with actual SVG icons) */
+.stat-icon {
+  font-size: 24px;
+  color: #777;
+}
+
+.card a{
+  text-decoration: none;
+  color: inherit;
+}
+
+
+.stat-card{
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.stat-card:hover { 
+  background-color: #dd2c35;  
+  color: white;
+              
+}
+
+.stat-card a:hover {  /* Target anchor tag within .stat-card on hover */
+  text-decoration: none;  /* Remove underline on hover */
+  
+}
+
+.card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 18px;
+}
+
+.col-md-2{
+  margin-bottom: 20px;
+}
+
+
+
+.game-cover-art {
+  position: relative; /* Ensure the container is positioned */
+  height: 400px;
+}
+
+.img-fluid {
+  border-radius: 2%;
+}
+
+.game-cover-art::before {
+  content: ""; /* Required for pseudo-elements */
+  position: absolute; /* Position the overlay */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 1) 110%
+  );
+  pointer-events: none;
+}
+
+/* Style for the game content */
+.game-content {
+  padding: 20px;
+  position: relative;
+  top: -200px; /* Slightly overlay on the cover image */
+}
+
+/* Placeholder for game title */
+.game-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Placeholder for game description */
+.game-description {
+  font-size: 16px;
+  color: #555;
+}
+
+.col-md-9 {
+  width: 50rem;
+}
+
+.custom-container {
+  max-width: 1250px;
+}
+
+.signin-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-top: 10%;
+}
+#sign-in-page, #register-page {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 5%;
+}
+
+#full-stars-example {
+  /* use display:inline-flex to prevent whitespace issues. alternatively, you can put all the children of .rating-group on a single line */
+  .rating-group {
+    display: inline-flex;
+  }
+
+  /* make hover effect work properly in IE */
+  .rating__icon {
+    pointer-events: none;
+  }
+
+  /* hide radio inputs */
+  .rating__input {
+    position: absolute !important;
+    left: -9999px !important;
+  }
+
+  /* set icon padding and size */
+  .rating__label {
+    cursor: pointer;
+    padding: 0 0.1em;
+    font-size: 2rem;
+  }
+
+  /* set default star color */
+  .rating__icon--star {
+    color: orange;
+  }
+
+  /* set color of none icon when unchecked */
+  .rating__icon--none {
+    color: #eee;
+  }
+
+  /* if none icon is checked, make it red */
+  .rating__input--none:checked + .rating__label .rating__icon--none {
+    color: red;
+  }
+
+  /* if any input is checked, make its following siblings grey */
+  .rating__input:checked ~ .rating__label .rating__icon--star {
+    color: #ddd;
+  }
+
+  /* make all stars orange on rating group hover */
+  .rating-group:hover .rating__label .rating__icon--star {
+    color: orange;
+  }
+
+  /* make hovered input's following siblings grey on hover */
+  .rating__input:hover ~ .rating__label .rating__icon--star {
+    color: #ddd;
+  }
+
+  /* make none icon grey on rating group hover */
+  .rating-group:hover
+    .rating__input--none:not(:hover)
+    + .rating__label
+    .rating__icon--none {
+    color: #eee;
+  }
+
+  /* make none icon red on hover */
+  .rating__input--none:hover + .rating__label .rating__icon--none {
+    color: red;
+  }
+}
+
+#full-stars-example-two {
+  /* use display:inline-flex to prevent whitespace issues. alternatively, you can put all the children of .rating-group on a single line */
+  .rating-group {
+    display: inline-flex;
+  }
+
+  /* make hover effect work properly in IE */
+  .rating__icon {
+    pointer-events: none;
+  }
+
+  /* hide radio inputs */
+  .rating__input {
+    position: absolute !important;
+    left: -9999px !important;
+  }
+
+  /* hide 'none' input from screenreaders */
+  .rating__input--none {
+    display: none;
+  }
+
+  /* set icon padding and size */
+  .rating__label {
+    cursor: pointer;
+    padding: 0 0.1em;
+    font-size: 2rem;
+  }
+
+  /* set default star color */
+  .rating__icon--star {
+    color: orange;
+  }
+
+  /* if any input is checked, make its following siblings grey */
+  .rating__input:checked ~ .rating__label .rating__icon--star {
+    color: #ddd;
+  }
+
+  /* make all stars orange on rating group hover */
+  .rating-group:hover .rating__label .rating__icon--star {
+    color: orange;
+  }
+
+  /* make hovered input's following siblings grey on hover */
+  .rating__input:hover ~ .rating__label .rating__icon--star {
+    color: #ddd;
+  }
+}
+
+#description, #game-number {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.checked {
+  color: orange;
+}
+
+body{
+  font-family: 'Bahnschrift';
+}
