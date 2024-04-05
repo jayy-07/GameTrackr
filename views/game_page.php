@@ -121,15 +121,25 @@ function isChecked($gameStatusID, $statusID)
           $result = $stmt->get_result();
           if ($result->num_rows > 0) {
             // The game is in the user's library, show the delete button
-            echo '<button class="btn btn-outline-danger mt-3" id="delete-button" style="display: flex; justify-content: center; width: 100%;">🗑️ Delete from library</button>';
+            echo '<button class="btn btn-outline-danger mt-3 active" id="delete-button" style="display: flex; justify-content: center; width: 100%;">🗑️ Delete from library</button>';
           }
 
           ?>
         </div>
 
-        <button class="btn btn-outline-danger mt-3" id="wishlist" style="display: flex; justify-content: center; width: 100%;">
-          🌟 Add to Wishlist
-        </button>
+        <?php 
+        $result = $db->query("SELECT * FROM wishlists WHERE userID = '$userID' AND gameID = '$gameID'");
+        if ($result->num_rows > 0) {
+            echo '<button class="btn btn-outline-danger mt-3 active" id="wishlist" style="display: flex; justify-content: center; width: 100%;">
+            🗑️ Remove from Wishlist
+          </button>';
+        } else {
+            echo '<button class="btn btn-outline-danger mt-3" id="wishlist" style="display: flex; justify-content: center; width: 100%;">
+            🌟 Add to Wishlist
+          </button>';
+        } 
+        
+        ?>
         <br /><br />
         <div id="full-stars-example">
           <div class="rating-group">
@@ -195,7 +205,7 @@ function isChecked($gameStatusID, $statusID)
     </div>
   </div>
 
-  <!-- Include Bootstrap JS (at the end of the body) -->
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
@@ -229,43 +239,35 @@ function isChecked($gameStatusID, $statusID)
           alert('Error retrieving data');
         }
       });
-    });
 
-    $(document).ready(function() {
-      // Assuming 'delete-div' is the parent element of your delete button
+
       $('#delete-div').on('click', '#delete-button', function() {
-        var gameID = '<?= $gameID ?>'; // Make sure this variable is set to the current game's ID
-        var userID = 1; // Make sure this variable is set to the current user's ID $_SESSION["userID"]
+        var gameID = '<?= $gameID ?>';
+        var userID = 1;
 
         $.ajax({
-          url: '../actions/delete_game.php', // The server-side script to handle the deletion
+          url: '../actions/delete_game.php',
           type: 'POST',
           data: {
             'gameID': gameID,
             'userID': userID
           },
           success: function(response) {
-            // Show a success alert
             appendAlert('Game deleted successfully.', 'success');
             $('#delete-button').hide();
             $('#button-group input[type="radio"]').prop('checked', false);
           },
           error: function(xhr, status, error) {
-            // Show a danger alert
             appendAlert('An error occurred: ' + error, 'danger');
           }
         });
       });
-    });
 
-
-
-    $(document).ready(function() {
       $('input[type=radio][name=playingStatus]').change(function() {
         var status = this.value;
-        var guid = '<?= $_GET["guid"] ?>'; // Make sure this variable is set to the current game's GUID 
+        var guid = '<?= $_GET["guid"] ?>';
         $.ajax({
-          url: '../actions/update_status.php', // The server-side script to handle the update
+          url: '../actions/update_status.php',
           type: 'POST',
           data: {
             'status': status,
@@ -276,7 +278,7 @@ function isChecked($gameStatusID, $statusID)
             appendAlert('Status updated successfully.', 'success');
             if ('1' == <?= $_POST['new'] ?>) {
               var div = document.getElementById('delete-div')
-              div.innerHTML = '<button class="btn btn-outline-danger mt-3" id="delete-button" style="display: flex; justify-content: center; width: 100%;">🗑️ Delete from library</button>';
+              div.innerHTML = '<button class="btn btn-outline-danger mt-3 active" id="delete-button" style="display: flex; justify-content: center; width: 100%;">🗑️ Delete from library</button>';
             } else {
               $('#delete-button').show();
             }
@@ -284,13 +286,43 @@ function isChecked($gameStatusID, $statusID)
 
           },
           error: function(xhr, status, error) {
-            // Handle errors
             appendAlert('An error occurred: ' + error, 'danger');
             alert('An error occurred: ' + error);
           }
         });
       });
+
+      var gameID = '<?= $gameID ?>';
+      var userID = 1;
+
+      // Add or remove the game from the wishlist when the button is clicked
+      $('#wishlist').click(function() {
+        $.ajax({
+          url: '../actions/wishlist.php',
+          type: 'POST',
+          data: {
+            userID: userID,
+            gameID: gameID
+          },
+          success: function updateButton(data) {
+            if (data == "added") {
+              $('#wishlist').text('🗑️ Remove from Wishlist');
+              $('#wishlist').addClass('active');
+              appendAlert('Added to your wishlist', 'success');
+            } else {
+              $('#wishlist').text('🌟 Add to Wishlist');
+              $('#wishlist').removeClass('active');
+              appendAlert('Removed from your wishlist', 'success');
+
+            }
+          }
+        });
+      });
+
+
     });
+
+
 
     const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
     const appendAlert = (message, type) => {
