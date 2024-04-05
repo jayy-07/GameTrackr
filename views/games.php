@@ -107,7 +107,9 @@
     <!-- Game Cards -->
     <div id="game-number">
     </div>
+    <div class="spinner-border m-5" role="status" id="loading"> <span class="visually-hidden">Loading...</span></div>
     <div class="row" id='games-container'>
+      
     </div>
   </div>
   <div class="row" id='searched-container'></div>
@@ -126,12 +128,14 @@
           },
           success: function(data) {
             $('#games-container').empty(); // Clear the games container
+
             if (data.length === 0) {
               $('#games-container').html('<p>No games yet.</p>'); // Display message if no games
             } else {
               // Loop through each game
               $('#game-number').html('<p>' + data.length + ' game(s)</p>');
               $.each(data, function(i, game) {
+                $("#loading").show();
                 // Fetch game details from the Giant Bomb API
                 var url = 'https://www.giantbomb.com/api/game/' + game.guid + '/?api_key=5743a53a52963939cd8a825b048a39af6bd172a0&format=jsonp&json_callback=?';
                 $.ajax({
@@ -154,6 +158,7 @@
 
                     // Append the new game card to the games container
                     $('#games-container').append(gameCard);
+                    $("#loading").hide();
                   },
                   error: function() {
                     //alert('Error retrieving game data');
