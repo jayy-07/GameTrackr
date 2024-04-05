@@ -1,3 +1,17 @@
+<?php
+
+session_start();
+
+$validation_error = "";
+$email_value = '';
+
+if (isset($_SESSION['login_error'])) {
+    $validation_error = $_SESSION['login_error'];
+    $email_value = $_SESSION['user_value'];
+    unset($_SESSION['login_error']);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,16 +38,17 @@
           >
         <div class="container signin-container">
           <h4 class="mb-4" style="margin-left: 37%;">Sign In</h4>
-            <form>
+            <form id="login-form" method="post" action="../actions/login_user_action.php">
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" placeholder="Enter your username">
+                    <input type="text" class="form-control" name="username" required pattern="(\w+)([.](?!$|[^\w]))?" id="username" placeholder="Enter your username">
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                    <input type="password" class="form-control" name = "password" id="password" required pattern="^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$"placeholder="Enter your password">
                 </div>
-                <button type="submit" class="btn" id="signin-btn">Sign In</button>
+                <p class="mb-3" id="error-message"><?php echo $validation_error; ?></p>
+                <button type="submit" class="btn" name="signin" id="signin-btn">Sign In</button>
             </form>
             <br>
             <p>New to Gametrackr? <a href="register.html">Create an account</a> </p>

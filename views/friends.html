@@ -14,126 +14,38 @@
     />
     <link href="../css/home.css" rel="stylesheet" />
     <!-- Include custom CSS for styling -->
-    <style>
-      /* Style for game cards */
-      .game-card {
-        width: 100%;
-        max-width: 200px;
-        margin-bottom: 20px;
-      }
-
-      /* Placeholder for game cover image */
-      .game-cover {
-        width: 100%;
-        height: auto;
-        object-fit: cover;
-      }
-
-      .game-button {
-        border: 2px solid transparent;
-        padding: 8px 15px;
-        margin-right: 10px;
-        font-weight: bold;
-        transition: background-color 0.3s, border-color 0.3s;
-      }
-
-      .game-button.active {
-        background-color: #ff0000; /* Red color (you can adjust this) */
-        border-color: #ff0000;
-        color: white;
-      }
-
-      .game-button:hover {
-        background-color: #ff0000;
-        border-color: #ff0000;
-        color: white;
-      }
-
-      .mb-4 {
-        display: flex;
-        justify-content: center;
-      }
-
-      .friend-item {
-        display: flex; /* Arrange elements horizontally */
-        align-items: center; /* Vertically align content */
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-      }
-
-      .friend-avatar {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        object-fit: cover; /* Maintain aspect ratio and cover image */
-      }
-
-      .friend-info {
-        margin-left: 10px; /* Space between avatar and info */
-      }
-
-      .friend-name {
-        font-weight: bold;
-      }
-
-      .friend-username {
-        color: #aaa; /* Lighter text for username */
-      }
-    </style>
   </head>
   <body>
     <header>
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-          <a
-            class="navbar-brand font-weight-bold"
-            id="logo-text"
-            href="dashboard.html"
-            >gametrackr</a
-          >
-          <ul
-            class="navbar-nav w-100 d-flex align-items-center"
-            id="navbar-right"
-          >
+          <a class="navbar-brand font-weight-bold" id="logo-text" href="dashboard.html">gametrackr</a>
+          <ul class="navbar-nav w-100 d-flex align-items-center" id="navbar-right">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item dropdown" id="dropdown-menu">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  id="userDropdown"
-                  role="button"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   joeyskillz
                 </a>
                 <div class="dropdown-menu" aria-labelledby="userDropdown">
                   <a class="dropdown-item" href="#">Profile</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="dashboard.html">Dashboard</a>
-                  <a class="dropdown-item" href="#">Played</a>
+                  <a class="dropdown-item" href="games.html">Played</a>
                   <a class="dropdown-item" href="games.html">Playing</a>
-                  <a class="dropdown-item" href="#">Backlog</a>
-                  <a class="dropdown-item" href="#">Wishlist</a>
-                  <a class="dropdown-item" href="#">Friends</a>
+                  <a class="dropdown-item" href="games.html">Backlog</a>
+                  <a class="dropdown-item" href="games.html">Wishlist</a>
+                  <a class="dropdown-item" href="friends.html">Friends</a>
                   <a class="dropdown-item" href="#">Reviews</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">Log Out</a>
                 </div>
               </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0 d-flex">
-              <input
-                id="search-input"
-                class="form-control me-2"
-                type="search"
-                placeholder="Search for games"
-                aria-label="Search"
-              />
+            <form class="form-inline my-2 my-lg-0 d-flex" method="post" action="../views/search.php">
+              <input id="search-input" class="form-control me-2" type="search" name="query" placeholder="Search for games" aria-label="Search" />
               <button id="search-btn" class="btn" type="submit">Search</button>
             </form>
+  
           </ul>
         </div>
       </nav>
@@ -158,7 +70,6 @@
         <button class="btn game-button">Following</button>
       </div>
 
-      <!-- Game Cards -->
       <div class="friend-item">
         <img
           src="profile_picture.jpg"

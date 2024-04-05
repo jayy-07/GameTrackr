@@ -12,7 +12,7 @@
      font-size: 30px;
 }
 
-#search-btn{
+#search-btn, #submitReview{
   background-color: #dd2c35;  
   color: #ffffff; 
   border-radius: 5px;
@@ -43,6 +43,8 @@
   text-decoration: none;
   color: inherit;
 }
+
+
 
 
 .stat-card{
@@ -94,7 +96,7 @@
   background: linear-gradient(
     to bottom,
     transparent,
-    rgba(255, 255, 255, 1) 110%
+    rgba(255, 255, 255, 1) 85%
   );
   pointer-events: none;
 }
@@ -273,3 +275,69 @@
 body{
   font-family: 'Bahnschrift';
 }
+
+/* Style for game cards */
+.game-card {
+  width: 100%;
+  max-width: 200px;
+  margin-bottom: 20px;
+}
+
+/* Placeholder for game cover image */
+.game-cover {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.game-button {
+  border: 2px solid transparent;
+  padding: 8px 15px;
+  margin-right: 10px;
+  font-weight: bold;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.game-button.active {
+  background-color: #ff0000; /* Red color (you can adjust this) */
+  border-color: #ff0000;
+  color: white;
+}
+
+.game-button:hover {
+  background-color: #ff0000;
+  border-color: #ff0000;
+  color: white;
+}
+
+.mb-4 {
+  display: flex;
+  justify-content: center;
+}
+
+.friend-item {
+  display: flex; /* Arrange elements horizontally */
+  align-items: center; /* Vertically align content */
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.friend-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover; /* Maintain aspect ratio and cover image */
+}
+
+.friend-info {
+  margin-left: 10px; /* Space between avatar and info */
+}
+
+.friend-name {
+  font-weight: bold;
+}
+
+.friend-username {
+  color: #aaa; /* Lighter text for username */
+}
+
