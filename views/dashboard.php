@@ -1,5 +1,9 @@
+<?php
+include '../actions/statistics.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 
 <head>
   <meta charset="UTF-8" />
@@ -54,44 +58,44 @@
       <div class="row">
         <div class="col-md-3">
           <div class="card stat-card">
-            <a href="games.html">
+            <a href="games.php?status=1">
               <div class="card-body">
-                <span class="stat-icon">📝</span>
-                <h5 class="card-title">Reviews</h5>
-                <p class="card-text" id="reviews-count">0</p>
+                <span class="stat-icon">✅</span>
+                <h5 class="card-title">Played</h5>
+                <p class="card-text" id="reviews-count"><?= $count_played; ?></p>
               </div>
             </a>
           </div>
         </div>
         <div class="col-md-3">
           <div class="card stat-card">
-            <a href="games.html">
+            <a href="games.php?status=2">
               <div class="card-body">
                 <span class="stat-icon">🎮</span>
-                <h5 class="card-title">Played</h5>
-                <p class="card-text" id="played-count">0</p>
+                <h5 class="card-title">Playing</h5>
+                <p class="card-text" id="played-count"><?= $count_playing; ?></p>
               </div>
             </a>
           </div>
         </div>
         <div class="col-md-3">
           <div class="card stat-card">
-            <a href="games.html">
+            <a href="games.php?status=3">
               <div class="card-body">
                 <span class="stat-icon">📅</span>
                 <h5 class="card-title">Backlog</h5>
-                <p class="card-text" id="backlog-count">0</p>
+                <p class="card-text" id="backlog-count"><?= $count_backlog; ?></p>
               </div>
             </a>
           </div>
         </div>
         <div class="col-md-3">
           <div class="card stat-card">
-            <a href="'games.html">
+            <a href="games.php?status=4">
               <div class="card-body">
                 <span class="stat-icon">🌟</span>
                 <h5 class="card-title">Wishlist</h5>
-                <p class="card-text" id="wishlist-count">0</p>
+                <p class="card-text" id="wishlist-count"><?= $count_wishlist; ?></p>
               </div>
             </a>
           </div>
@@ -103,55 +107,91 @@
 
     <div class="col-md-12 mt-5">
       <h4>Recent Games</h4>
-      <br />
-      <div class="row gx-4">
-        <!-- Game Card -->
-        <div class="col-md-2">
-          <div class="card">
-            <a href="#">
-              <img src="https://www.giantbomb.com/a/uploads/scale_small/16/164924/3564705-1228401694-76f46.png" class="card-img-top" alt="game image" />
-              <div class="card-body">
-                <h5 class="card-title">Game Title</h5>
-              </div>
-            </a>
+      <div style="display: flex; justify-content: center; align-items: center; height: 50vh;" id="loading">
+          <div class="spinner-border m-5" role="status">
+            <span class="visually-hidden">Loading...</span>
           </div>
         </div>
-        <!-- Repeat game card for each game -->
+      <br />
+      <div style="display: flex; justify-content: center; align-items: center; height: 50vh;" id="message-container">
+      </div>
+      <div class="row gx-4" id="games-container">
+
       </div>
     </div>
   </div>
 
-  <!-- Include Bootstrap JS (at the end of the body) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
-    /* $(document).ready(function() {
-      $('#search-btn').click(function(e) {
-        e.preventDefault();
-        var searchQuery = $('#search-input').val();
-        var apiKey = '5743a53a52963939cd8a825b048a39af6bd172a0';
-        var url = 'https://www.giantbomb.com/api/search/?format=jsonp&api_key=' + apiKey + '&query=' + searchQuery;
-
+    $("#loading").show();
+    $(document).ready(function() {
+      function fetchGames(statusID, userID) {
         $.ajax({
-          url: url,
-          method: 'GET',
-          dataType: 'jsonp',
-          jsonp: 'json_callback',
+          url: '../actions/fetch_games.php',
+          method: 'POST',
+          dataType: 'json',
+          data: {
+            statusID: statusID,
+            userID: userID
+          },
           success: function(data) {
-            // Clear previous results
-            $('#results').empty();
+            console.log(data);
+            $('#games-container').empty(); // Clear the games container
 
-            // Loop through the results and append them to the #results div
-            $.each(data.results, function(i, item) {
-              $('#results').append('<p>' + item.name + '</p>');
-            });
+            if (data.length == 0) {
+              $('#games-container').empty();
+              $('#message-container').html('<p>No games yet.</p>'); // Display message if no games
+            } else {
+              // Loop through each game
+              $('#game-number').html('<p>' + data.length + (data.length === 1 ? ' game' : ' games') + '</p>');
+              $.each(data, function(i, game) {
+                $("#loading").show();
+                // Fetch game details from the Giant Bomb API
+                var url = 'https://www.giantbomb.com/api/game/' + game.guid + '/?api_key=5743a53a52963939cd8a825b048a39af6bd172a0&format=jsonp&json_callback=?';
+                $.ajax({
+                  url: url,
+                  method: 'GET',
+                  dataType: 'jsonp',
+                  success: function(apiData) {
+                    // Create a new game card
+                    var gameCard = '<div class="col-md-3" style="margin-left: 0px">' +
+                      '<div class="card game-card">' +
+                      '<a href="game_page.php?guid=' + game.guid + '">' +
+                      '<img src="' + apiData.results.image.original_url + '" alt="' + apiData.results.name + '" style="object-fit: cover; width: 199px; height: 270px; border-top-left-radius: 5px; border-top-right-radius: 5px;"/>' +
+                      '<div class="card-body">' +
+                      '<h5 class="card-title">' + apiData.results.name + '</h5>' +
+                      '<p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; font-size: 13px;">' + apiData.results.publishers[0].name + '</p>' +
+                      '</div>' +
+                      '</a>' +
+                      '</div>' +
+                      '</div>';
+
+                    // Append the new game card to the games container
+                    $('#message-container').hide();
+                    $("#loading").hide();
+                    $('#games-container').append(gameCard);
+                  },
+                  error: function() {
+                    //alert('Error retrieving game data');
+                    $('#message-container').html('<p>No games yet.</p>');
+
+                  }
+                });
+              });
+            }
           },
           error: function() {
-            alert('Error retrieving data');
+            //alert('Error retrieving games');
+            $('#message-container').html('<p>No games yet.</p>');
           }
         });
-      });
-    }); */
+      }
+
+      fetchGames(5, 1);
+
+
+    });
   </script>
 </body>
 

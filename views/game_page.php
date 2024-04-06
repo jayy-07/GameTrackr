@@ -217,6 +217,7 @@ if ($gameID == 0) {
   <script>
     $(document).ready(function() {
       var guid = '<?php echo $_GET['guid']; ?>';
+      console.log(guid);
       var url = 'https://www.giantbomb.com/api/game/' + guid + '/?api_key=5743a53a52963939cd8a825b048a39af6bd172a0&format=jsonp&json_callback=?';
 
       $.ajax({
@@ -264,7 +265,7 @@ if ($gameID == 0) {
 
 
       $('#delete-div').on('click', '#delete-button', function() {
-        var gameID = '<?php $gameID ?>';
+        var gameID = '<?= $gameID ?>';
         var userID = 1;
 
         $.ajax({
@@ -287,7 +288,7 @@ if ($gameID == 0) {
 
       $('input[type=radio][name=playingStatus]').change(function() {
         var status = this.value;
-        var guid = '<?php $_GET["guid"] ?>';
+        var guid = '<?= $_GET["guid"] ?>';
         $.ajax({
           url: '../actions/update_status.php',
           type: 'POST',
@@ -298,8 +299,8 @@ if ($gameID == 0) {
           success: function(response) {
             //alert('Status updated successfully.');
             appendAlert('Status updated successfully.', 'success');
-            if ('1' == <?php echo $_POST['new'] ?>) {
-              var div = document.getElementById('delete-div')
+            if ('1' == <?= $_POST['new'] ?>) {
+              var div = document.getElementById('delete-div');
               div.innerHTML = '<button class="btn btn-outline-danger mt-3 active" id="delete-button" style="display: flex; justify-content: center; width: 100%;">🗑️ Delete from library</button>';
             } else {
               $('#delete-button').show();
@@ -314,9 +315,9 @@ if ($gameID == 0) {
         });
       });
 
-      var gameID = '<?php echo $gameID ?>';
+      var gameID = '<?= $gameID ?>';
       var userID = 1;
-      var guid = '<?php echo $_GET["guid"] ?>';
+      var guid = '<?= $_GET["guid"] ?>';
 
 
       // Add or remove the game from the wishlist when the button is clicked
@@ -346,9 +347,9 @@ if ($gameID == 0) {
       // Event handler for rating change
       $('input[name=rating]').change(function() {
         var rating = $(this).val();
-        var gameId = <?php echo $gameID ?>;
-        var userId = <?php echo $userID ?>;
-        var guid = '<?php echo $_GET["guid"] ?>';
+        var gameId = <?= $gameID ?>;
+        var userId = <?= $userID ?>;
+        var guid = '<?= $_GET["guid"] ?>';
 
         // If the "No rating" radio button is selected, set rating to null
         if (rating === 'no-rating') {
@@ -364,7 +365,7 @@ if ($gameID == 0) {
             'guid': guid
           },
           success: function(response) {
-            $('#alert').html('<div class="alert alert-success" role="alert">' + response + '</div>');
+            $('#alert').html('<div class="alert alert-dismissible alert-success" role="alert">' + response + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
           }
         });
       });
@@ -372,9 +373,9 @@ if ($gameID == 0) {
       // Event handler for review submission
       $('#submitReview').click(function() {
         var reviewText = $('#reviewText').val();
-        var gameId = <?php echo $gameID ?>;
-        var userId = <?php echo $userID ?>;
-        var guid = '<?php echo $_GET["guid"] ?>';
+        var gameId = <?= $gameID ?>;
+        var userId = <?= $userID ?>;
+        var guid = '<?= $_GET["guid"] ?>';
 
         // Include the current rating
         var rating = $('input[name=rating]:checked').val();
@@ -393,7 +394,7 @@ if ($gameID == 0) {
             'guid': guid
           },
           success: function(response) {
-            $('#alert').html('<div class="alert alert-success" role="alert">' + response + '</div>');
+            $('#alert').html('<div class="alert alert-dismissible alert-success" role="alert">' + response + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
           }
         });
       });

@@ -102,7 +102,11 @@
       <span id="resultsLength"></span>
 
     </div>
-    <div class="spinner-border m-5" role="status" id="loading"> <span class="visually-hidden">Loading...</span></div>
+    <div style="display: flex; justify-content: center; align-items: center; height: 50vh;" id="loading">
+      <div class="spinner-border m-5" role="status" >
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
     <br />
 
     <!-- Game Cards -->
@@ -111,18 +115,19 @@
   </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="../js/search.js"></script>
 <script>
-  var page = 1;
-
   $(document).ready(function() {
-    loadResults(); // Load initial results
+    $('#loadMore').hide(); // Load initial results
   });
 
-  $('#loadMore').on('click', function() {
-    page += 1; // Go to next page of results
+  $('#loadMore').off('click').on('click', function() {
     loadResults();
   });
+
+
+  var page = 1; // Initialize page variable
 
   function loadResults() {
     var searchTerm = '<?php echo $_POST['query']; ?>';
@@ -156,10 +161,17 @@
               '</a>'
             );
           });
-          // Show Load More button after results are loaded
-          $('#loadMore').show();
+
+          // Calculate remaining results
+          var remainingResults = data.number_of_total_results - (page * 10);
+
+          if (remainingResults == 0) {
+            $('#loadMore').hide();
+          } else {
+            $('#loadMore').show();
+            page += 1;
+          }
         } else {
-          // Hide Load More button if there are no more results
           $('#loadMore').hide();
         }
       },

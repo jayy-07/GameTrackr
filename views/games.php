@@ -105,18 +105,24 @@
     <!-- Game Cards -->
     <div id="game-number">
     </div>
-    <div class="spinner-border m-5" role="status" id="loading"> <span class="visually-hidden">Loading...</span></div>
+    <div style="display: flex; justify-content: center; align-items: center; height: 50vh;" id="loading">
+      <div class="spinner-border m-5" role="status" >
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: center; align-items: center; height: 50vh;" id="message-container">
+      
+    </div>
+
     <div class="row" id='games-container'>
 
     </div>
   </div>
-  <div class="row" id='searched-container'></div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script>
+    $("#loading").hide();
     $(document).ready(function() {
-      $("#loading").hide();
-
       function fetchGames(statusID, userID) {
         $.ajax({
           url: '../actions/fetch_games.php',
@@ -130,10 +136,11 @@
             $('#games-container').empty(); // Clear the games container
 
             if (data.length == 0) {
-              $('#games-container').html('<p>No games yet.</p>'); // Display message if no games
+              $('#games-container').empty();
+              $('#message-container').html('<p>No games yet.</p>'); // Display message if no games
             } else {
               // Loop through each game
-              $('#game-number').html('<p>' + data.length + ' game(s)</p>');
+              $('#game-number').html('<p>' + data.length + (data.length === 1 ? ' game' : ' games') + '</p>');
               $.each(data, function(i, game) {
                 $("#loading").show();
                 // Fetch game details from the Giant Bomb API
@@ -157,12 +164,14 @@
                       '</div>';
 
                     // Append the new game card to the games container
-                    $('#games-container').append(gameCard);
+                    $('#message-container').hide();
                     $("#loading").hide();
+                    $('#game-number').show();
+                    $('#games-container').append(gameCard);
                   },
                   error: function() {
                     //alert('Error retrieving game data');
-                    $('#games-container').html('<p>No games yet.</p>');
+                    $('#message-container').html('<p>No games yet.</p>');
                     $('#game-number').hide();
 
                   }
@@ -172,11 +181,12 @@
           },
           error: function() {
             //alert('Error retrieving games');
-            $('#games-container').html('<p>No games yet.</p>');
+            $('#message-container').html('<p>No games yet.</p>');
             $('#game-number').hide();
           }
         });
       }
+
 
       $('.game-button').click(function() {
         $('.game-button').removeClass('active');

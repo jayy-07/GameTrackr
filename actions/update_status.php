@@ -1,38 +1,33 @@
 <?php
 include '../settings/connection.php';
 //include '../settings/core.php';
+session_start();
 $userID = 1;
-echo $userID;
+$gameID = $_SESSION['gameID'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['status'], $_POST['guid'])) {
     $newStatus = $_POST['status'];
     $guid = $_POST['guid'];
 
     // Check if the game already exists in the database
-    $query = "SELECT gameID FROM games WHERE guid = ?";
-    $stmt = $db->prepare($query);
-    $stmt->bind_param("s", $guid);
-    $stmt->execute();
-    $stmt_result = $stmt->get_result();
-    $stmt->close();
-
-    if ($stmt_result->num_rows == 0) {
-        // If the game does not exist, insert it into the games table
-        $addGameQuery = "INSERT INTO games (guid) VALUES (?)";
-        $addGameStmt = $db->prepare($addGameQuery);
-        $addGameStmt->bind_param("s", $guid);
-        $addGameStmt->execute();
-        $addGameStmt->close();
-
-        // Get the gameID of the newly inserted game
+    if ($gameID == 0) {
+        $query = "SELECT gameID FROM games WHERE guid = ?";
         $stmt = $db->prepare($query);
         $stmt->bind_param("s", $guid);
         $stmt->execute();
         $stmt_result = $stmt->get_result();
         $stmt->close();
+    
+        $addGameQuery = "INSERT INTO games (guid) VALUES (?)";
+        $addGameStmt = $db->prepare($addGameQuery);
+        $addGameStmt->bind_param("s", $guid);
+        $addGameStmt->execute();
+        $gameID = mysqli_insert_id($db);
+        $_SESSION['gameID'] = $gameID;
+        $addGameStmt->close();
     }
 
-    $gameID = $stmt_result->fetch_assoc()['gameID'];
+    //$gameID = $stmt_result->fetch_assoc()['gameID'];
 
     // Start transaction
     $db->begin_transaction();
