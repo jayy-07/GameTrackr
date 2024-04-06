@@ -1,8 +1,27 @@
 <?php
 include '../settings/connection.php';  
-
+session_start();
 $userID = $_POST['userID'];
-$gameID = $_POST['gameID'];
+$gameID = $_SESSION['gameID'];
+$guid = $_POST['guid'];
+
+
+if ($gameID == 0) {
+    $query = "SELECT gameID FROM games WHERE guid = ?";
+    $stmt = $db->prepare($query);
+    $stmt->bind_param("s", $guid);
+    $stmt->execute();
+    $stmt_result = $stmt->get_result();
+    $stmt->close();
+
+    $addGameQuery = "INSERT INTO games (guid) VALUES (?)";
+    $addGameStmt = $db->prepare($addGameQuery);
+    $addGameStmt->bind_param("s", $guid);
+    $addGameStmt->execute();
+    $gameID = mysqli_insert_id($db);
+    $_SESSION['gameID'] = $gameID;
+    $addGameStmt->close();
+}
 
 // Check if the game is already in the wishlist
 $query = "SELECT * FROM wishlists WHERE userID = ? AND gameID = ?";
@@ -10,6 +29,7 @@ $stmt = $db->prepare($query);
 $stmt->bind_param("ii", $userID, $gameID);
 $stmt->execute();
 $result = $stmt->get_result();
+
 
 if($result->num_rows > 0) {
     $query = "DELETE FROM wishlists WHERE userID = ? AND gameID = ?";

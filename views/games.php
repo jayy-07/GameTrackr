@@ -68,8 +68,11 @@
                 <a class="dropdown-item" href="#">Profile</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="dashboard.php">Dashboard</a>
-                <a class="dropdown-item" href="games.php">Your Games</a>
-                <a class="dropdown-item" href="friends.html">Friends</a>
+                <a class="dropdown-item" href="games.php?status=1">Played</a>
+                <a class="dropdown-item" href="games.php?status=2">Playing</a>
+                <a class="dropdown-item" href="games.php?status=3">Backlog</a>
+                <a class="dropdown-item" href="games.php?status=4">Wishlist</a>
+                <a class="dropdown-item" href="friends.php">Friends</a>
                 <a class="dropdown-item" href="#">Reviews</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Log Out</a>
@@ -90,11 +93,6 @@
     <!-- Game Categories -->
     <h2>Your Games</h2>
     <br>
-    <div class="mb-5">
-      <form class="form-inline my-2 my-lg-0 d-flex">
-        <input id="search-input" class="form-control me-2" type="search" placeholder="Search your library" aria-label="Search" />
-      </form>
-    </div>
     <div class="mb-4">
       <button class="btn game-button active" id="playedButton" data-status-id="1">
         Played
@@ -109,7 +107,7 @@
     </div>
     <div class="spinner-border m-5" role="status" id="loading"> <span class="visually-hidden">Loading...</span></div>
     <div class="row" id='games-container'>
-      
+
     </div>
   </div>
   <div class="row" id='searched-container'></div>
@@ -117,6 +115,8 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script>
     $(document).ready(function() {
+      $("#loading").hide();
+
       function fetchGames(statusID, userID) {
         $.ajax({
           url: '../actions/fetch_games.php',
@@ -129,7 +129,7 @@
           success: function(data) {
             $('#games-container').empty(); // Clear the games container
 
-            if (data.length === 0) {
+            if (data.length == 0) {
               $('#games-container').html('<p>No games yet.</p>'); // Display message if no games
             } else {
               // Loop through each game
@@ -163,6 +163,8 @@
                   error: function() {
                     //alert('Error retrieving game data');
                     $('#games-container').html('<p>No games yet.</p>');
+                    $('#game-number').hide();
+
                   }
                 });
               });
@@ -171,6 +173,7 @@
           error: function() {
             //alert('Error retrieving games');
             $('#games-container').html('<p>No games yet.</p>');
+            $('#game-number').hide();
           }
         });
       }
@@ -179,13 +182,19 @@
         $('.game-button').removeClass('active');
         var statusID = $(this).data('status-id');
         var userID = 1;
-        console.log(statusID);
+        //console.log(statusID);
         $(this).addClass('active');
         fetchGames(statusID, userID);
       });
 
       // Fetch games of status 1 when the page loads
-      fetchGames(1, 1);
+      fetchGames(<?= $_GET['status'] ?>, 1);
+
+      // Remove 'active' class from all buttons
+      $('.game-button').removeClass('active');
+
+      // Add 'active' class to the button with the matching 'status-id'
+      $('.game-button[data-status-id="' + <?= $_GET['status'] ?> + '"]').addClass('active');
     });
   </script>
 </body>

@@ -1,13 +1,36 @@
 <?php
 include '../settings/connection.php';
+session_start();
+$gameID = $_SESSION['gameID'];
+$userID = $_POST['userID'];
+$guid = $_POST['guid'];
 
-$gameId = $_POST['gameID'];
-$userId = $_POST['userID'];
+
+if ($gameID == 0) {
+    $query = "SELECT gameID FROM games WHERE guid = ?";
+    $stmt = $db->prepare($query);
+    $stmt->bind_param("s", $guid);
+    $stmt->execute();
+    $stmt_result = $stmt->get_result();
+    $stmt->close();
+
+
+    // If the game does not exist, insert it into the games table
+    $addGameQuery = "INSERT INTO games (guid) VALUES (?)";
+    $addGameStmt = $db->prepare($addGameQuery);
+    $addGameStmt->bind_param("s", $guid);
+    $addGameStmt->execute();
+    $gameID = mysqli_insert_id($db);
+    $_SESSION['gameID'] = $gameID;
+    $addGameStmt->close();
+}
+
+
 
 // Fetch the existing review from the database
 $query = "SELECT ReviewText, Rating FROM reviews WHERE userID = ? AND gameID = ?";
 $stmt = $db->prepare($query);
-$stmt->bind_param('ii', $userId, $gameId);
+$stmt->bind_param('ii', $userID, $gameID);
 $stmt->execute();
 $result = $stmt->get_result();
 $existingReview = $result->fetch_assoc();
@@ -27,7 +50,7 @@ if (isset($_POST['rating']) || isset($_POST['reviewText'])) {
               ON DUPLICATE KEY UPDATE reviewText = VALUES(reviewText), rating = VALUES(rating)";
 
     $stmt = $db->prepare($query);
-    $stmt->bind_param('iisi', $userId, $gameId, $reviewText, $rating);
+    $stmt->bind_param('iisi', $userID, $gameID, $reviewText, $rating);
     $stmt->execute();
 
     if ($stmt->affected_rows > 0) {

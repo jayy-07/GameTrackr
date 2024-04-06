@@ -1,5 +1,7 @@
 <?php
+session_start();
 include_once '../settings/connection.php';
+include '../functions/show_reviews.php';
 $_POST['new'] = 1;
 $userID = 1;
 
@@ -10,7 +12,12 @@ $stmt->execute();
 $result = $stmt->get_result();
 if ($result->num_rows > 0) {
   $gameID = $result->fetch_assoc()['gameID'];
+} else {
+  $gameID = 0;
 }
+
+$_SESSION['gameID'] = $gameID;
+
 
 // Fetch the statusID for the game and user
 $query = "SELECT statusID FROM usergames WHERE userID = ? AND gameID = (SELECT gameID FROM games WHERE guid = ?)";
@@ -33,6 +40,24 @@ $status = [
 function isChecked($gameStatusID, $statusID)
 {
   return $gameStatusID == $statusID ? "checked" : "";
+}
+
+if ($gameID == 0) {
+  $reviewText = '';
+  $rating = null;
+} else {
+  $query = "SELECT reviewText, rating FROM reviews WHERE userID = ? AND gameID = ?";
+  $stmt = $db->prepare($query);
+  $stmt->bind_param('ii', $userID, $gameID);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $review = $result->fetch_assoc();
+
+  $reviewText = isset($review['reviewText']) ? $review['reviewText'] : '';
+  //echo $reviewText;
+  $rating = isset($review['rating']) ? $review['rating'] : null;
+
+  $stmt->close();
 }
 ?>
 
@@ -65,11 +90,11 @@ function isChecked($gameStatusID, $statusID)
                 <a class="dropdown-item" href="#">Profile</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="dashboard.php">Dashboard</a>
-                <a class="dropdown-item" href="games.html">Played</a>
-                <a class="dropdown-item" href="games.html">Playing</a>
-                <a class="dropdown-item" href="games.html">Backlog</a>
-                <a class="dropdown-item" href="games.html">Wishlist</a>
-                <a class="dropdown-item" href="friends.html">Friends</a>
+                <a class="dropdown-item" href="games.php?status=1">Played</a>
+                <a class="dropdown-item" href="games.php?status=2">Playing</a>
+                <a class="dropdown-item" href="games.php?status=3">Backlog</a>
+                <a class="dropdown-item" href="games.php?status=4">Wishlist</a>
+                <a class="dropdown-item" href="friends.php">Friends</a>
                 <a class="dropdown-item" href="#">Reviews</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Log Out</a>
@@ -127,36 +152,29 @@ function isChecked($gameStatusID, $statusID)
           ?>
         </div>
 
-        <?php 
+        <?php
         $result = $db->query("SELECT * FROM wishlists WHERE userID = '$userID' AND gameID = '$gameID'");
         if ($result->num_rows > 0) {
-            echo '<button class="btn btn-outline-danger mt-3 active" id="wishlist" style="display: flex; justify-content: center; width: 100%;">
+          echo '<button class="btn btn-outline-danger mt-3 active" id="wishlist" style="display: flex; justify-content: center; width: 100%;">
             🗑️ Remove from Wishlist
           </button>';
         } else {
-            echo '<button class="btn btn-outline-danger mt-3" id="wishlist" style="display: flex; justify-content: center; width: 100%;">
+          echo '<button class="btn btn-outline-danger mt-3" id="wishlist" style="display: flex; justify-content: center; width: 100%;">
             🌟 Add to Wishlist
           </button>';
-        } 
-        
+        }
+
         ?>
         <br /><br />
-        <div id="full-stars-example">
+        <div id="full-stars-example" style="margin-left: 5%;">
           <div class="rating-group">
-            <input class="rating__input rating__input--none" name="rating" id="rating-none" value="0" type="radio" />
+            <input class="rating__input rating__input--none" name="rating" id="rating-none" value="0" type="radio" <?= $rating === null || $rating === 0 ? 'checked' : '' ?>>
             <label aria-label="No rating" class="rating__label" for="rating-none"><i class="rating__icon rating__icon--none fa fa-ban"></i></label>
-            <label aria-label="1 star" class="rating__label" for="rating-1"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
-            <input class="rating__input" name="rating" id="rating-1" value="1" type="radio" />
-            <label aria-label="2 stars" class="rating__label" for="rating-2"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
-            <input class="rating__input" name="rating" id="rating-2" value="2" type="radio" />
-            <label aria-label="3 stars" class="rating__label" for="rating-3"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
-            <input class="rating__input" name="rating" id="rating-3" value="3" type="radio" checked />
-            <label aria-label="4 stars" class="rating__label" for="rating-4"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
-            <input class="rating__input" name="rating" id="rating-4" value="4" type="radio" />
-            <label aria-label="5 stars" class="rating__label" for="rating-5"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
-            <input class="rating__input" name="rating" id="rating-5" value="5" type="radio" />
+            <?php for ($i = 1; $i <= 5; $i++) : ?>
+              <label aria-label="<?= $i ?> star" class="rating__label" for="rating-<?= $i ?>"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+              <input class="rating__input" name="rating" id="rating-<?= $i ?>" value="<?= $i ?>" type="radio" <?= $i == $rating ? 'checked' : '' ?>>
+            <?php endfor; ?>
           </div>
-
         </div>
       </div>
       <div style="margin-left: 50px;" class="col-md-8">
@@ -166,8 +184,8 @@ function isChecked($gameStatusID, $statusID)
             by <strong id="publisher"></strong>
           </p>
           <br />
-          <p style="font-size: 15px;" id="description">
-          </p>
+          <div style="font-size: 15px;" id="description">
+          </div>
           <span id="genres" style="color: #777"></span>
           <br />
           <span id="platforms" style="color: #777"></span>
@@ -176,7 +194,7 @@ function isChecked($gameStatusID, $statusID)
         </div>
         <hr />
         <h4 style="font-family: Bahnschrift">Make a Review</h4>
-        <textarea id="reviewText" class="form-control" rows="3" maxlength="4000" placeholder="What'd you think..."></textarea>
+        <textarea id="reviewText" class="form-control" rows="3" maxlength="4000" placeholder="What'd you think..."><?= htmlspecialchars($reviewText) ?></textarea>
 
         <br />
         <div id="alert"></div>
@@ -186,20 +204,8 @@ function isChecked($gameStatusID, $statusID)
         <hr />
 
         <h4>Reviews</h4>
-        <div class="media mt-3">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReHlx51nzRyT2IGzXt9Ow0uUOOTCEAXlPejZhQLm1aAw&s" class="mr-3 rounded-circle" alt="Profile Photo" style="width: 40px; height: 40px" />
-          <div class="media-body">
-            <h5 class="mt-0">John Doe</h5>
-            <div class="rating">
-              <span class="fa fa-star checked"></span>
-              <span class="fa fa-star checked"></span>
-              <span class="fa fa-star checked"></span>
-              <span class="fa fa-star"></span>
-              <span class="fa fa-star"></span>
-            </div>
-            <p>This is a sample review text.</p>
-            <small class="text-muted">Posted on 2024-04-03</small>
-          </div>
+        <div id="reviews">
+          <?php showReviews($gameID); ?>
         </div>
       </div>
     </div>
@@ -219,21 +225,37 @@ function isChecked($gameStatusID, $statusID)
         dataType: 'jsonp',
         success: function(data) {
           $('#game-cover').attr('src', data.results.image.medium_url);
-          if (data.results.images[1].original) {
-            $('#cover-image').attr('src', data.results.images[1].original);
-          } else {
-            $('#cover-image').attr('src', data.results.images[0].original);
-          }
+          $('#cover-image').attr('src', data.results.images[1]?.original || data.results.images[0].original);
           $('#title').text(data.results.name);
           $('#publisher').text(data.results.publishers[0].name);
-          if (data.results.description) {
-            $('#description').html(data.results.description.replace(/<a[^>]*>(.*?)<\/a>/g, "$1").replace(/<img[^>]*>/g, ""));
-          } else {
-            $('#description').html("");
-          }
           $('#genres').text("Genres: " + data.results.genres.map(genre => genre.name).join(', '));
           $('#platforms').text("Platforms: " + data.results.platforms.map(platform => platform.name).join(', '));
-          $('#release-year').text("Release year: " + data.results.expected_release_year);
+          var releaseYear = data.results.original_release_date ? new Date(data.results.original_release_date).getFullYear() : data.results.expected_release_year;
+          $('#release-year').text("Release year: " + releaseYear);
+
+
+          if (data.results.description) {
+            var description = data.results.description.replace(/<a[^>]*>(.*?)<\/a>/g, "$1").replace(/<img[^>]*>/g, "");
+            var maxLength = 1600; // Maximum number of characters to display
+            var shortText = description.substr(0, maxLength);
+            console.log(shortText);
+            var longText = description.substr(maxLength);
+            console.log(longText);
+            $('#description').html(shortText + '<br><span><a href="#" class="readMore">Read More</a></span>');
+
+            $(document).on('click', '.readMore', function(e) {
+              e.preventDefault();
+              $(this).hide();
+              $('#description').html(shortText + longText + '<a href="#" class="readLess">Read Less</a>');
+            });
+
+            $(document).on('click', '.readLess', function(e) {
+              e.preventDefault();
+              $('#description').html(shortText + '<br><span><a href="#" class="readMore">Read More</a></span>');
+            });
+          } else {
+            $('#description').html("No description available");
+          }
         },
         error: function() {
           alert('Error retrieving data');
@@ -242,7 +264,7 @@ function isChecked($gameStatusID, $statusID)
 
 
       $('#delete-div').on('click', '#delete-button', function() {
-        var gameID = '<?= $gameID ?>';
+        var gameID = '<?php $gameID ?>';
         var userID = 1;
 
         $.ajax({
@@ -265,7 +287,7 @@ function isChecked($gameStatusID, $statusID)
 
       $('input[type=radio][name=playingStatus]').change(function() {
         var status = this.value;
-        var guid = '<?= $_GET["guid"] ?>';
+        var guid = '<?php $_GET["guid"] ?>';
         $.ajax({
           url: '../actions/update_status.php',
           type: 'POST',
@@ -276,7 +298,7 @@ function isChecked($gameStatusID, $statusID)
           success: function(response) {
             //alert('Status updated successfully.');
             appendAlert('Status updated successfully.', 'success');
-            if ('1' == <?= $_POST['new'] ?>) {
+            if ('1' == <?php echo $_POST['new'] ?>) {
               var div = document.getElementById('delete-div')
               div.innerHTML = '<button class="btn btn-outline-danger mt-3 active" id="delete-button" style="display: flex; justify-content: center; width: 100%;">🗑️ Delete from library</button>';
             } else {
@@ -292,8 +314,10 @@ function isChecked($gameStatusID, $statusID)
         });
       });
 
-      var gameID = '<?= $gameID ?>';
+      var gameID = '<?php echo $gameID ?>';
       var userID = 1;
+      var guid = '<?php echo $_GET["guid"] ?>';
+
 
       // Add or remove the game from the wishlist when the button is clicked
       $('#wishlist').click(function() {
@@ -302,7 +326,7 @@ function isChecked($gameStatusID, $statusID)
           type: 'POST',
           data: {
             userID: userID,
-            gameID: gameID
+            'guid': guid
           },
           success: function updateButton(data) {
             if (data == "added") {
@@ -315,6 +339,61 @@ function isChecked($gameStatusID, $statusID)
               appendAlert('Removed from your wishlist', 'success');
 
             }
+          }
+        });
+      });
+
+      // Event handler for rating change
+      $('input[name=rating]').change(function() {
+        var rating = $(this).val();
+        var gameId = <?php echo $gameID ?>;
+        var userId = <?php echo $userID ?>;
+        var guid = '<?php echo $_GET["guid"] ?>';
+
+        // If the "No rating" radio button is selected, set rating to null
+        if (rating === 'no-rating') {
+          rating = 0;
+        }
+
+        $.ajax({
+          url: '../actions/submit_review.php',
+          type: 'post',
+          data: {
+            'rating': rating,
+            'userID': userID,
+            'guid': guid
+          },
+          success: function(response) {
+            $('#alert').html('<div class="alert alert-success" role="alert">' + response + '</div>');
+          }
+        });
+      });
+
+      // Event handler for review submission
+      $('#submitReview').click(function() {
+        var reviewText = $('#reviewText').val();
+        var gameId = <?php echo $gameID ?>;
+        var userId = <?php echo $userID ?>;
+        var guid = '<?php echo $_GET["guid"] ?>';
+
+        // Include the current rating
+        var rating = $('input[name=rating]:checked').val();
+        if (rating === 'no-rating') {
+          rating = 0;
+        }
+
+        $.ajax({
+          url: '../actions/submit_review.php',
+          type: 'post',
+          data: {
+            'reviewText': reviewText,
+            'rating': rating,
+            'gameID': gameID,
+            'userID': userID,
+            'guid': guid
+          },
+          success: function(response) {
+            $('#alert').html('<div class="alert alert-success" role="alert">' + response + '</div>');
           }
         });
       });

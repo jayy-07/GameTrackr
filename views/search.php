@@ -61,10 +61,10 @@
 </head>
 
 <body>
-<header>
+  <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
-        <a class="navbar-brand font-weight-bold" id="logo-text" href="dashboard.html">gametrackr</a>
+        <a class="navbar-brand font-weight-bold" id="logo-text" href="dashboard.php">gametrackr</a>
         <ul class="navbar-nav w-100 d-flex align-items-center" id="navbar-right">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown" id="dropdown-menu">
@@ -74,12 +74,12 @@
               <div class="dropdown-menu" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="#">Profile</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="dashboard.html">Dashboard</a>
-                <a class="dropdown-item" href="games.html">Played</a>
-                <a class="dropdown-item" href="games.html">Playing</a>
-                <a class="dropdown-item" href="games.html">Backlog</a>
-                <a class="dropdown-item" href="games.html">Wishlist</a>
-                <a class="dropdown-item" href="friends.html">Friends</a>
+                <a class="dropdown-item" href="dashboard.php">Dashboard</a>
+                <a class="dropdown-item" href="games.php?status=1">Played</a>
+                <a class="dropdown-item" href="games.php?status=2">Playing</a>
+                <a class="dropdown-item" href="games.php?status=3">Backlog</a>
+                <a class="dropdown-item" href="games.php?status=4">Wishlist</a>
+                <a class="dropdown-item" href="friends.php">Friends</a>
                 <a class="dropdown-item" href="#">Reviews</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Log Out</a>
@@ -87,7 +87,7 @@
             </li>
           </ul>
           <form class="form-inline my-2 my-lg-0 d-flex" method="post" action="../views/search.php">
-            <input id="search-input" class="form-control me-2" type="search" name="query" placeholder="Search for games" aria-label="Search" value= "<?=htmlspecialchars($_POST['query']);?>" />
+            <input id="search-input" class="form-control me-2" type="search" name="query" placeholder="Search for games" aria-label="Search" />
             <button id="search-btn" class="btn" type="submit">Search</button>
           </form>
 
@@ -100,7 +100,9 @@
     <div id="game-number">
       <p>Search results for "<?= htmlspecialchars($_POST['query']); ?>"</p>
       <span id="resultsLength"></span>
+
     </div>
+    <div class="spinner-border m-5" role="status" id="loading"> <span class="visually-hidden">Loading...</span></div>
     <br />
 
     <!-- Game Cards -->
@@ -111,7 +113,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="../js/search.js"></script>
 <script>
-  var page = 1; 
+  var page = 1;
 
   $(document).ready(function() {
     loadResults(); // Load initial results
@@ -126,12 +128,19 @@
     var searchTerm = '<?php echo $_POST['query']; ?>';
     var url = 'https://www.giantbomb.com/api/search/?api_key=5743a53a52963939cd8a825b048a39af6bd172a0&format=jsonp&json_callback=?&query=' + searchTerm + '&resources=game&page=' + page;
 
+    // Show loading button
+    $("#loading").show();
+
     $.ajax({
       url: url,
       method: 'GET',
       dataType: 'jsonp',
       success: function(data) {
         $('#resultsLength').text(+data.number_of_total_results + " results");
+
+        // Hide loading button
+        $("#loading").hide();
+
         if (data.results.length > 0) { // Check if there are results
           $.each(data.results, function(i, item) {
             var release_year = item.expected_release_year ? item.expected_release_year : "";
@@ -147,12 +156,16 @@
               '</a>'
             );
           });
-          $('#loadMore').show(); // Show Load More button after results are loaded
+          // Show Load More button after results are loaded
+          $('#loadMore').show();
         } else {
-          $('#loadMore').hide(); // Hide Load More button if there are no more results
+          // Hide Load More button if there are no more results
+          $('#loadMore').hide();
         }
       },
       error: function() {
+        // Hide loading button
+        $("#loading").hide();
         alert('Error retrieving data');
       }
     });

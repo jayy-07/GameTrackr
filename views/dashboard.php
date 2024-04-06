@@ -14,7 +14,7 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
-        <a class="navbar-brand font-weight-bold" id="logo-text" href="dashboard.html">gametrackr</a>
+        <a class="navbar-brand font-weight-bold" id="logo-text" href="dashboard.php">gametrackr</a>
         <ul class="navbar-nav w-100 d-flex align-items-center" id="navbar-right">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown" id="dropdown-menu">
@@ -24,12 +24,12 @@
               <div class="dropdown-menu" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="#">Profile</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="dashboard.html">Dashboard</a>
-                <a class="dropdown-item" href="games.html">Played</a>
-                <a class="dropdown-item" href="games.html">Playing</a>
-                <a class="dropdown-item" href="games.html">Backlog</a>
-                <a class="dropdown-item" href="games.html">Wishlist</a>
-                <a class="dropdown-item" href="friends.html">Friends</a>
+                <a class="dropdown-item" href="dashboard.php">Dashboard</a>
+                <a class="dropdown-item" href="games.php?status=1">Played</a>
+                <a class="dropdown-item" href="games.php?status=2">Playing</a>
+                <a class="dropdown-item" href="games.php?status=3">Backlog</a>
+                <a class="dropdown-item" href="games.php?status=4">Wishlist</a>
+                <a class="dropdown-item" href="friends.php">Friends</a>
                 <a class="dropdown-item" href="#">Reviews</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Log Out</a>
@@ -40,6 +40,7 @@
             <input id="search-input" class="form-control me-2" type="search" name="query" placeholder="Search for games" aria-label="Search" />
             <button id="search-btn" class="btn" type="submit">Search</button>
           </form>
+
         </ul>
       </div>
     </nav>
