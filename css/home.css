@@ -1,28 +1,27 @@
-
-
-#navbar-right{
-    justify-content: flex-end;
-    margin-left: 35rem;
+#navbar-right {
+  justify-content: flex-end;
+  margin-left: 35rem;
 }
 
-#dropdown-menu{
-    margin-right: 15px;
+#dropdown-menu {
+  margin-right: 15px;
 }
 
-#logo-text{
-     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-     font-size: 30px;
+#logo-text {
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: 30px;
 }
 
-#search-btn, #submitReview{
-  background-color: #dd2c35;  
-  color: #ffffff; 
+#search-btn,
+#submitReview {
+  background-color: #dd2c35;
+  color: #ffffff;
   border-radius: 5px;
 }
 
-#signin-btn{
-  background-color: #dd2c35;  
-  color: #ffffff; 
+#signin-btn {
+  background-color: #dd2c35;
+  color: #ffffff;
   border-radius: 5px;
   width: 100%;
 }
@@ -41,26 +40,23 @@
   color: #777;
 }
 
-.card a{
+.card a {
   text-decoration: none;
   color: inherit;
 }
 
-
-
-.stat-card{
+.stat-card {
   transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-.stat-card:hover { 
-  background-color: #dd2c35;  
+.stat-card:hover {
+  background-color: #dd2c35;
   color: white;
-              
 }
 
-.stat-card a:hover {  /* Target anchor tag within .stat-card on hover */
-  text-decoration: none;  /* Remove underline on hover */
-  
+.stat-card a:hover {
+  /* Target anchor tag within .stat-card on hover */
+  text-decoration: none; /* Remove underline on hover */
 }
 
 .card-title {
@@ -72,11 +68,9 @@
   font-size: 15px;
 }
 
-.col-md-2{
+.col-md-2 {
   margin-bottom: 20px;
 }
-
-
 
 .game-cover-art {
   position: relative; /* Ensure the container is positioned */
@@ -100,6 +94,17 @@
     rgba(255, 255, 255, 1) 85%
   );
   pointer-events: none;
+}
+
+#error-message {
+  color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-option:hover {
+  cursor: pointer;
 }
 
 /* Style for the game content */
@@ -130,9 +135,12 @@
   bottom: 0;
   height: 50px; /* Adjust this value to change the height of the fade effect */
   width: 100%;
-  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1) 100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 1) 100%
+  );
 }
-
 
 .custom-container {
   max-width: 1250px;
@@ -146,12 +154,38 @@
   border-radius: 10px;
   margin-top: 10%;
 }
-#sign-in-page, #register-page {
+
+.setup-container {
+  max-width: 510px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-top: 10%;
+}
+
+#sign-in-page,
+#register-page {
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
   border-radius: 10px;
   margin-top: 5%;
+}
+
+#setup-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 5%;
+}
+
+.avatar-option {
+  width: 70px;
+  height: 70px;
+  margin-right: 20px;
+  margin-top: 20px;
 }
 
 #full-stars-example {
@@ -272,7 +306,8 @@
   }
 }
 
-#description, #game-number {
+#description,
+#game-number {
   font-size: 18px;
   color: #555;
   margin-bottom: 30px;
@@ -282,8 +317,8 @@
   color: orange;
 }
 
-body{
-  font-family: 'Bahnschrift';
+body {
+  font-family: "Bahnschrift";
 }
 
 /* Style for game cards */
@@ -292,8 +327,6 @@ body{
   max-width: 200px;
   max-height: 400px;
   margin-bottom: 20px;
-
-
 }
 
 /* Placeholder for game cover image */
@@ -303,12 +336,11 @@ body{
   object-fit: cover;
 }
 
-#card-image{
+#card-image {
   width: 100% !important;
   height: auto !important;
   object-fit: cover !important;
 }
-
 
 .game-button {
   padding: 8px 15px;
@@ -359,4 +391,3 @@ body{
 .friend-username {
   color: #aaa; /* Lighter text for username */
 }
-

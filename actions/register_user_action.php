@@ -35,7 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bind_param("sss", $username, $email, $hashed_password);
 
         if ($stmt->execute()) {
-            header('Location: ../login/login.php');
+            $userID = mysqli_insert_id($db);
+            $_SESSION['user_id'] = $userID;
+            header('Location: ../login/setup.php');
             exit();
         } else {
             $errors[] = "Error: " . $stmt->error;

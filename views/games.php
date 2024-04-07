@@ -198,13 +198,13 @@
       });
 
       // Fetch games of status 1 when the page loads
-      fetchGames(<?= $_GET['status'] ?>, 1);
+      fetchGames(<?= isset($_GET['status']) ? $_GET['status'] : 1?>, 1);
 
       // Remove 'active' class from all buttons
       $('.game-button').removeClass('active');
 
       // Add 'active' class to the button with the matching 'status-id'
-      $('.game-button[data-status-id="' + <?= $_GET['status'] ?> + '"]').addClass('active');
+      $('.game-button[data-status-id="' + <?=isset($_GET['status']) ? $_GET['status'] : 13?> + '"]').addClass('active');
     });
   </script>
 </body>

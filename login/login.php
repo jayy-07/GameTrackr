@@ -37,7 +37,7 @@ if (isset($_SESSION['login_error'])) {
             >gametrackr</div
           >
         <div class="container signin-container">
-          <h4 class="mb-4" style="margin-left: 37%;">Sign In</h4>
+          <h4 class="mb-4">Sign In</h4>
             <form id="login-form" method="post" action="../actions/login_user_action.php">
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
