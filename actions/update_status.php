@@ -8,6 +8,9 @@ $gameID = $_SESSION['gameID'];
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['status'], $_POST['guid'])) {
     $newStatus = $_POST['status'];
     $guid = $_POST['guid'];
+    $gameName = $_POST['gameName'];
+    $gameImage = $_POST['gameImage'];
+    $gamePublisher = $_POST['gamePublisher'];
 
     // Check if the game already exists in the database
     if ($gameID == 0) {
@@ -18,9 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['status'], $_POST['guid
         $stmt_result = $stmt->get_result();
         $stmt->close();
     
-        $addGameQuery = "INSERT INTO games (guid) VALUES (?)";
+        $addGameQuery = "INSERT INTO games (guid, name, image, publisher) VALUES (?,?,?,?)";
         $addGameStmt = $db->prepare($addGameQuery);
-        $addGameStmt->bind_param("s", $guid);
+        $addGameStmt->bind_param("ssss", $guid, $gameName, $gameImage, $gamePublisher);
         $addGameStmt->execute();
         $gameID = mysqli_insert_id($db);
         $_SESSION['gameID'] = $gameID;

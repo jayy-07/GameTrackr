@@ -4,6 +4,9 @@ session_start();
 $gameID = $_SESSION['gameID'];
 $userID = $_POST['userID'];
 $guid = $_POST['guid'];
+$gameName = $_POST['gameName'];
+$gameImage = $_POST['gameImage'];
+$gamePublisher = $_POST['gamePublisher'];
 
 
 if ($gameID == 0) {
@@ -14,17 +17,14 @@ if ($gameID == 0) {
     $stmt_result = $stmt->get_result();
     $stmt->close();
 
-
-    // If the game does not exist, insert it into the games table
-    $addGameQuery = "INSERT INTO games (guid) VALUES (?)";
+    $addGameQuery = "INSERT INTO games (guid, name, image, publisher) VALUES (?,?,?,?)";
     $addGameStmt = $db->prepare($addGameQuery);
-    $addGameStmt->bind_param("s", $guid);
+    $addGameStmt->bind_param("ssss", $guid, $gameName, $gameImage, $gamePublisher);
     $addGameStmt->execute();
     $gameID = mysqli_insert_id($db);
     $_SESSION['gameID'] = $gameID;
     $addGameStmt->close();
 }
-
 
 
 // Fetch the existing review from the database

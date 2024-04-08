@@ -9,48 +9,6 @@
   <!-- Include Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
   <link href="../css/home.css" rel="stylesheet" />
-  <!-- Include custom CSS for styling -->
-  <style>
-    /* Style for game cards */
-    .game-card {
-      width: 100%;
-      max-width: 200px;
-      margin-bottom: 20px;
-    }
-
-    /* Placeholder for game cover image */
-    .game-cover {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-    }
-
-    .game-button {
-      border: 2px solid transparent;
-      padding: 8px 15px;
-      margin-right: 10px;
-      font-weight: bold;
-      transition: background-color 0.3s, border-color 0.3s;
-    }
-
-    .game-button.active {
-      background-color: #ff0000;
-      /* Red color (you can adjust this) */
-      border-color: #ff0000;
-      color: white;
-    }
-
-    .game-button:hover {
-      background-color: #ff0000;
-      border-color: #ff0000;
-      color: white;
-    }
-
-    .mb-4 {
-      display: flex;
-      justify-content: center;
-    }
-  </style>
 </head>
 
 <body>
@@ -73,7 +31,7 @@
                 <a class="dropdown-item" href="games.php?status=3">Backlog</a>
                 <a class="dropdown-item" href="games.php?status=4">Wishlist</a>
                 <a class="dropdown-item" href="friends.php">Friends</a>
-                <a class="dropdown-item" href="#">Reviews</a>
+                <a class="dropdown-item" href="reviews.php">My Reviews</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Log Out</a>
               </div>
@@ -106,12 +64,12 @@
     <div id="game-number">
     </div>
     <div style="display: flex; justify-content: center; align-items: center; height: 50vh;" id="loading">
-      <div class="spinner-border m-5" role="status" >
+      <div class="spinner-border m-5" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
     <div style="display: flex; justify-content: center; align-items: center; height: 50vh;" id="message-container">
-      
+
     </div>
 
     <div class="row" id='games-container'>
@@ -124,6 +82,7 @@
     $("#loading").hide();
     $(document).ready(function() {
       function fetchGames(statusID, userID) {
+        $('#games-container').empty();
         $.ajax({
           url: '../actions/fetch_games.php',
           method: 'POST',
@@ -133,54 +92,42 @@
             userID: userID
           },
           success: function(data) {
-            $('#games-container').empty(); // Clear the games container
-
-            if (data.length == 0) {
-              $('#games-container').empty();
-              $('#message-container').html('<p>No games yet.</p>'); // Display message if no games
+             //console.log(data);
+            if (data.length == null) { 
+              console.log(0);
+              $('#message-container').show();
+              $('#message-container').html('<p>No games yet.</p>'); 
             } else {
               // Loop through each game
               $('#game-number').html('<p>' + data.length + (data.length === 1 ? ' game' : ' games') + '</p>');
+              $('#message-container').hide();
+              $('#game-number').show();
+
+              //console.log(data);
               $.each(data, function(i, game) {
                 $("#loading").show();
-                // Fetch game details from the Giant Bomb API
-                var url = 'https://www.giantbomb.com/api/game/' + game.guid + '/?api_key=5743a53a52963939cd8a825b048a39af6bd172a0&format=jsonp&json_callback=?';
-                $.ajax({
-                  url: url,
-                  method: 'GET',
-                  dataType: 'jsonp',
-                  success: function(apiData) {
-                    // Create a new game card
-                    var gameCard = '<div class="col-md-3" style="margin-left: 0px">' +
-                      '<div class="card game-card">' +
-                      '<a href="game_page.php?guid=' + game.guid + '">' +
-                      '<img src="' + apiData.results.image.original_url + '" alt="' + apiData.results.name + '" style="object-fit: cover; width: 199px; height: 270px; border-top-left-radius: 5px; border-top-right-radius: 5px;"/>' +
-                      '<div class="card-body">' +
-                      '<h5 class="card-title">' + apiData.results.name + '</h5>' +
-                      '<p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; font-size: 13px;">' + apiData.results.publishers[0].name + '</p>' +
-                      '</div>' +
-                      '</a>' +
-                      '</div>' +
-                      '</div>';
+                var gameCard = '<div class="col-md-3" style="margin-left: 0px">' +
+                  '<div class="card game-card">' +
+                  '<a href="game_page.php?guid=' + game.guid + '">' +
+                  '<img src="' + game.image + '" alt="' + game.name + '" style="object-fit: cover; width: 199px; height: 270px; border-top-left-radius: 5px; border-top-right-radius: 5px;"/>' +
+                  '<div class="card-body">' +
+                  '<h5 class="card-title">' + game.name + '</h5>' +
+                  '<p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; font-size: 13px;">' + game.publisher +'</p>' +
+                  '</div>' +
+                  '</a>' +
+                  '</div>' +
+                  '</div>';
 
-                    // Append the new game card to the games container
-                    $('#message-container').hide();
-                    $("#loading").hide();
-                    $('#game-number').show();
-                    $('#games-container').append(gameCard);
-                  },
-                  error: function() {
-                    //alert('Error retrieving game data');
-                    $('#message-container').html('<p>No games yet.</p>');
-                    $('#game-number').hide();
 
-                  }
-                });
+                // Append the new game card to the games container
+                $("#loading").hide();
+                $('#games-container').append(gameCard);
               });
             }
           },
           error: function() {
             //alert('Error retrieving games');
+            $('#message-container').show();
             $('#message-container').html('<p>No games yet.</p>');
             $('#game-number').hide();
           }
@@ -198,13 +145,13 @@
       });
 
       // Fetch games of status 1 when the page loads
-      fetchGames(<?= isset($_GET['status']) ? $_GET['status'] : 1?>, 1);
+      fetchGames(<?= isset($_GET['status']) ? $_GET['status'] : 1 ?>, 1);
 
       // Remove 'active' class from all buttons
       $('.game-button').removeClass('active');
 
       // Add 'active' class to the button with the matching 'status-id'
-      $('.game-button[data-status-id="' + <?=isset($_GET['status']) ? $_GET['status'] : 13?> + '"]').addClass('active');
+      $('.game-button[data-status-id="' + <?= isset($_GET['status']) ? $_GET['status'] : 1 ?> + '"]').addClass('active');
     });
   </script>
 </body>

@@ -127,6 +127,7 @@ include '../actions/statistics.php';
     $("#loading").show();
     $(document).ready(function() {
       function fetchGames(statusID, userID) {
+        $('#games-container').empty();
         $.ajax({
           url: '../actions/fetch_games.php',
           method: 'POST',
@@ -136,54 +137,44 @@ include '../actions/statistics.php';
             userID: userID
           },
           success: function(data) {
-            console.log(data);
-            $('#games-container').empty(); // Clear the games container
-
-            if (data.length == 0) {
-              $('#games-container').empty();
-              $('#message-container').html('<p>No games yet.</p>'); // Display message if no games
+             //console.log(data);
+            if (data.length == null) { 
+              console.log(0);
+              $('#message-container').show();
+              $('#message-container').html('<p>No games yet.</p>'); 
             } else {
               // Loop through each game
               $('#game-number').html('<p>' + data.length + (data.length === 1 ? ' game' : ' games') + '</p>');
+              $('#message-container').hide();
+              $('#game-number').show();
+
+              //console.log(data);
               $.each(data, function(i, game) {
                 $("#loading").show();
-                // Fetch game details from the Giant Bomb API
-                var url = 'https://www.giantbomb.com/api/game/' + game.guid + '/?api_key=5743a53a52963939cd8a825b048a39af6bd172a0&format=jsonp&json_callback=?';
-                $.ajax({
-                  url: url,
-                  method: 'GET',
-                  dataType: 'jsonp',
-                  success: function(apiData) {
-                    // Create a new game card
-                    var gameCard = '<div class="col-md-3" style="margin-left: 0px">' +
-                      '<div class="card game-card">' +
-                      '<a href="game_page.php?guid=' + game.guid + '">' +
-                      '<img src="' + apiData.results.image.original_url + '" alt="' + apiData.results.name + '" style="object-fit: cover; width: 199px; height: 270px; border-top-left-radius: 5px; border-top-right-radius: 5px;"/>' +
-                      '<div class="card-body">' +
-                      '<h5 class="card-title">' + apiData.results.name + '</h5>' +
-                      '<p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; font-size: 13px;">' + apiData.results.publishers[0].name + '</p>' +
-                      '</div>' +
-                      '</a>' +
-                      '</div>' +
-                      '</div>';
+                var gameCard = '<div class="col-md-3" style="margin-left: 0px">' +
+                  '<div class="card game-card">' +
+                  '<a href="game_page.php?guid=' + game.guid + '">' +
+                  '<img src="' + game.image + '" alt="' + game.name + '" style="object-fit: cover; width: 199px; height: 270px; border-top-left-radius: 5px; border-top-right-radius: 5px;"/>' +
+                  '<div class="card-body">' +
+                  '<h5 class="card-title">' + game.name + '</h5>' +
+                  '<p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; font-size: 13px;">' + game.publisher +'</p>' +
+                  '</div>' +
+                  '</a>' +
+                  '</div>' +
+                  '</div>';
 
-                    // Append the new game card to the games container
-                    $('#message-container').hide();
-                    $("#loading").hide();
-                    $('#games-container').append(gameCard);
-                  },
-                  error: function() {
-                    //alert('Error retrieving game data');
-                    $('#message-container').html('<p>No games yet.</p>');
 
-                  }
-                });
+                // Append the new game card to the games container
+                $("#loading").hide();
+                $('#games-container').append(gameCard);
               });
             }
           },
           error: function() {
             //alert('Error retrieving games');
+            $('#message-container').show();
             $('#message-container').html('<p>No games yet.</p>');
+            $('#game-number').hide();
           }
         });
       }

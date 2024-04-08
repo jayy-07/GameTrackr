@@ -215,9 +215,12 @@ if ($gameID == 0) {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
+    var gameName;
+    var gameImage;
+    var gamePublisher;
     $(document).ready(function() {
       var guid = '<?php echo $_GET['guid']; ?>';
-      console.log(guid);
+      //console.log(guid);
       var url = 'https://www.giantbomb.com/api/game/' + guid + '/?api_key=5743a53a52963939cd8a825b048a39af6bd172a0&format=jsonp&json_callback=?';
 
       $.ajax({
@@ -226,9 +229,12 @@ if ($gameID == 0) {
         dataType: 'jsonp',
         success: function(data) {
           $('#game-cover').attr('src', data.results.image.medium_url);
+          gameImage = data.results.image.medium_url;
           $('#cover-image').attr('src', data.results.images[1]?.original || data.results.images[0].original);
           $('#title').text(data.results.name);
+          gameName = data.results.name;
           $('#publisher').text(data.results.publishers[0].name);
+          gamePublisher = data.results.publishers[0].name;
           $('#genres').text("Genres: " + data.results.genres.map(genre => genre.name).join(', '));
           $('#platforms').text("Platforms: " + data.results.platforms.map(platform => platform.name).join(', '));
           var releaseYear = data.results.original_release_date ? new Date(data.results.original_release_date).getFullYear() : data.results.expected_release_year;
@@ -239,9 +245,9 @@ if ($gameID == 0) {
             var description = data.results.description.replace(/<a[^>]*>(.*?)<\/a>/g, "$1").replace(/<img[^>]*>/g, "");
             var maxLength = 1600; // Maximum number of characters to display
             var shortText = description.substr(0, maxLength);
-            console.log(shortText);
+            //console.log(shortText);
             var longText = description.substr(maxLength);
-            console.log(longText);
+            //console.log(longText);
             $('#description').html(shortText + '<br><span><a href="#" class="readMore">Read More</a></span>');
 
             $(document).on('click', '.readMore', function(e) {
@@ -294,7 +300,10 @@ if ($gameID == 0) {
           type: 'POST',
           data: {
             'status': status,
-            'guid': guid
+            'guid': guid,
+            'gameName': gameName,
+            'gameImage':gameImage,
+            'gamePublisher': gamePublisher
           },
           success: function(response) {
             //alert('Status updated successfully.');
@@ -327,7 +336,10 @@ if ($gameID == 0) {
           type: 'POST',
           data: {
             userID: userID,
-            'guid': guid
+            'guid': guid,
+            'gameName': gameName,
+            'gameImage':gameImage,
+            'gamePublisher': gamePublisher
           },
           success: function updateButton(data) {
             if (data == "added") {
@@ -362,7 +374,10 @@ if ($gameID == 0) {
           data: {
             'rating': rating,
             'userID': userID,
-            'guid': guid
+            'guid': guid,
+            'gameName': gameName,
+            'gameImage':gameImage,
+            'gamePublisher': gamePublisher
           },
           success: function(response) {
             $('#alert').html('<div class="alert alert-dismissible alert-success" role="alert">' + response + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
@@ -374,7 +389,6 @@ if ($gameID == 0) {
       $('#submitReview').click(function() {
         var reviewText = $('#reviewText').val();
         var gameId = <?= $gameID ?>;
-        var userId = <?= $userID ?>;
         var guid = '<?= $_GET["guid"] ?>';
 
         // Include the current rating
@@ -391,7 +405,10 @@ if ($gameID == 0) {
             'rating': rating,
             'gameID': gameID,
             'userID': userID,
-            'guid': guid
+            'guid': guid,
+            'gameName': gameName,
+            'gameImage':gameImage,
+            'gamePublisher': gamePublisher
           },
           success: function(response) {
             $('#alert').html('<div class="alert alert-dismissible alert-success" role="alert">' + response + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');

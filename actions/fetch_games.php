@@ -6,7 +6,7 @@ $userID = $_POST['userID'];
 
 
 if ($statusID == 4) {
-    $sql = "SELECT g.gameID, g.guid 
+    $sql = "SELECT g.gameID, g.guid, g.name, g.image 
         FROM games g
         INNER JOIN wishlists w ON g.gameID = w.gameID
         WHERE w.userID = ?";
@@ -25,7 +25,10 @@ if ($statusID == 4) {
         while ($row = $result->fetch_assoc()) {
             $games[] = array(
                 'gameID' => $row["gameID"],
-                'guid' => $row["guid"]
+                'guid' => $row["guid"],
+                'name' => $row["name"],
+                'image' => $row["image"],
+                'publisher' => $row["publisher"]
             );
         }
     } else {
@@ -39,7 +42,7 @@ if ($statusID == 4) {
     header('Content-Type: application/json');
     echo json_encode($games);
 } else if ($statusID == 5) {
-    $sql_recent_games = "SELECT ug.gameID, g.guid 
+    $sql_recent_games = "SELECT ug.gameID, g.guid, g.name, g.image, g.publisher
                          FROM usergames ug
                          INNER JOIN games g ON ug.gameID = g.gameID
                          WHERE ug.userID = ? 
@@ -53,7 +56,10 @@ if ($statusID == 4) {
         while ($row = $result_recent_games->fetch_assoc()) {
             $games[] = array(
                 'gameID' => $row["gameID"],
-                'guid' => $row["guid"]
+                'guid' => $row["guid"],
+                'name' => $row["name"],
+                'image' => $row["image"],
+                'publisher' => $row["publisher"]
             );
         }
     } else {
@@ -65,7 +71,7 @@ if ($statusID == 4) {
     header('Content-Type: application/json');
     echo json_encode($games);
 } else {
-    $sql = "SELECT g.gameID, g.guid 
+    $sql = "SELECT g.gameID, g.guid, g.name, g.image, g.publisher
         FROM games g
         INNER JOIN usergames ug ON g.gameID = ug.gameID
         WHERE ug.userID = ? AND ug.statusID = ?";
@@ -83,7 +89,11 @@ if ($statusID == 4) {
         while ($row = $result->fetch_assoc()) {
             $games[] = array(
                 'gameID' => $row["gameID"],
-                'guid' => $row["guid"]
+                'guid' => $row["guid"],
+                'name' => $row["name"],
+                'image' => $row["image"],
+                'publisher' => $row["publisher"]
+                
             );
         }
     } else {
