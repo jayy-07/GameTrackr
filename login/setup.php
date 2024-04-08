@@ -23,7 +23,6 @@
       <form id="setup-form" method="post" action="../actions/setup_user_action.php">
         <div class="mb-3">
           <label for="avatar" class="form-label">Select an Avatar</label>
-          <!-- Add your avatar images here -->
           <div class="row-cols-auto" id="avatar-selection">
             <?php include "../functions/display_avatars.php"; ?>
             <img class="avatar-option mr-3 rounded-circle" id="avatar-option" src="../img/no_profile_image.png" alt="No image">

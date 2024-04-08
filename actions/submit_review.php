@@ -40,7 +40,7 @@ $stmt->close();
 if (isset($_POST['rating']) || isset($_POST['reviewText'])) {
     // Use the existing review text and rating as defaults if no new value is provided
     $rating = isset($_POST['rating']) && $_POST['rating'] !== 'no-rating' ? $_POST['rating'] : null;
-    if ($rating === 0) {
+    if ($rating == 0) {
         $rating = null;
     }
     $reviewText = $_POST['reviewText'] ?? ($existingReview ? $existingReview['ReviewText'] : null);

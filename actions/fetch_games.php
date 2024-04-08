@@ -31,9 +31,7 @@ if ($statusID == 4) {
                 'publisher' => $row["publisher"]
             );
         }
-    } else {
-        echo "0 results";
-    }
+    }  
 
     // Close connection
     $db->close();
@@ -62,9 +60,7 @@ if ($statusID == 4) {
                 'publisher' => $row["publisher"]
             );
         }
-    } else {
-        echo "0 results";
-    }
+    }  
     // Close connection
     $db->close();
     // Return game data as JSON
@@ -96,9 +92,7 @@ if ($statusID == 4) {
                 
             );
         }
-    } else {
-        echo "0 results";
-    }
+    }  
 
     // Close connection
     $db->close();

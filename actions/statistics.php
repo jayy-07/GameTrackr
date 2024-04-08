@@ -1,6 +1,6 @@
 <?php
 include '../settings/connection.php';
-$userID = 1; // replace this with the actual user ID
+$userID = 1; 
 
 // SQL queries
 $sql_played = "SELECT COUNT(*) as count FROM usergames WHERE statusID = 1 AND userID = $userID";
@@ -20,6 +20,4 @@ $count_played = $result_played->fetch_assoc()['count'];
 $count_playing = $result_playing->fetch_assoc()['count'];
 $count_wishlist = $result_wishlist->fetch_assoc()['count'];
 $count_backlog = $result_backlog->fetch_assoc()['count']; 
-
-// Now you can use the variables $count_played, $count_playing, $count_wishlist, and $count_backlog
 ?>

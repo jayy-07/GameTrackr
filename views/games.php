@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Game Collection</title>
   <link rel="icon" type="image/x-icon" href="../images/favicon.png">
-  <!-- Include Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
   <link href="../css/home.css" rel="stylesheet" />
 </head>
@@ -93,10 +92,11 @@
           },
           success: function(data) {
              //console.log(data);
-            if (data.length == null) { 
-              console.log(0);
-              $('#message-container').show();
-              $('#message-container').html('<p>No games yet.</p>'); 
+            if (data.length == 0) { 
+              //alert('Error retrieving games');
+            $('#message-container').show();
+            $('#message-container').html('<p>No games yet.</p>');
+            $('#game-number').hide();
             } else {
               // Loop through each game
               $('#game-number').html('<p>' + data.length + (data.length === 1 ? ' game' : ' games') + '</p>');

@@ -34,9 +34,9 @@ include '../actions/statistics.php';
                 <a class="dropdown-item" href="games.php?status=3">Backlog</a>
                 <a class="dropdown-item" href="games.php?status=4">Wishlist</a>
                 <a class="dropdown-item" href="friends.php">Friends</a>
-                <a class="dropdown-item" href="#">Reviews</a>
+                <a class="dropdown-item" href="reviews.php">Reviews</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Log Out</a>
+                <a class="dropdown-item" href="../login/logout.php">Log Out</a>
               </div>
             </li>
           </ul>
@@ -108,10 +108,10 @@ include '../actions/statistics.php';
     <div class="col-md-12 mt-5">
       <h4>Recent Games</h4>
       <div style="display: flex; justify-content: center; align-items: center; height: 50vh;" id="loading">
-          <div class="spinner-border m-5" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
+        <div class="spinner-border m-5" role="status">
+          <span class="visually-hidden">Loading...</span>
         </div>
+      </div>
       <br />
       <div style="display: flex; justify-content: center; align-items: center; height: 50vh;" id="message-container">
       </div>
@@ -120,6 +120,9 @@ include '../actions/statistics.php';
       </div>
     </div>
   </div>
+  <footer class="page-footer navbar-expand-lg navbar-dark bg-dark">
+    <p>Powered by <a href="https://www.giantbomb.com/" target="_blank">GiantBomb</a></p>
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -137,11 +140,11 @@ include '../actions/statistics.php';
             userID: userID
           },
           success: function(data) {
-             //console.log(data);
-            if (data.length == null) { 
+            //console.log(data);
+            if (data.length == null) {
               console.log(0);
               $('#message-container').show();
-              $('#message-container').html('<p>No games yet.</p>'); 
+              $('#message-container').html('<p>No games yet.</p>');
             } else {
               // Loop through each game
               $('#game-number').html('<p>' + data.length + (data.length === 1 ? ' game' : ' games') + '</p>');
@@ -157,7 +160,7 @@ include '../actions/statistics.php';
                   '<img src="' + game.image + '" alt="' + game.name + '" style="object-fit: cover; width: 199px; height: 270px; border-top-left-radius: 5px; border-top-right-radius: 5px;"/>' +
                   '<div class="card-body">' +
                   '<h5 class="card-title">' + game.name + '</h5>' +
-                  '<p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; font-size: 13px;">' + game.publisher +'</p>' +
+                  '<p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; font-size: 13px;">' + game.publisher + '</p>' +
                   '</div>' +
                   '</a>' +
                   '</div>' +

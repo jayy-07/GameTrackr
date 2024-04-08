@@ -7,10 +7,13 @@ function showReviews($gameID)
         global $db; // Use the $conn from the included connection file
 
         // Prepare the SQL statement
-        $sql = "SELECT users.userName, reviews.reviewText, reviews.rating, reviews.reviewDate 
-            FROM reviews 
-            JOIN users ON reviews.UserID = users.userID 
-            WHERE reviews.gameID = ?";
+        $sql = "SELECT users.userName, avatars.link, reviews.reviewText, reviews.rating, reviews.reviewDate 
+        FROM reviews 
+        JOIN users ON reviews.userID = users.userID 
+        JOIN useravatar ON users.userID = useravatar.userID 
+        JOIN avatars ON useravatar.avatarID = avatars.avatarID
+        WHERE reviews.gameID = ? AND (reviews.reviewText IS NOT NULL OR reviews.rating IS NOT NULL)";
+
 
         /* $sql = "SELECT users.firstname, users.lastname, userphoto.photo, reviews.ReviewText, reviews.Rating, reviews.ReviewDate 
     FROM reviews 
@@ -30,10 +33,11 @@ function showReviews($gameID)
         // Get the result
         $result = $stmt->get_result();
 
+
         if ($result->num_rows != 0) {
             while ($row = $result->fetch_assoc()) {
                 echo '<div class="d-flex align-items-center mt-3">';
-                echo '<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReHlx51nzRyT2IGzXt9Ow0uUOOTCEAXlPejZhQLm1aAw&s" class="mr-3 rounded d-block" alt="Profile Photo" style="width: 50px; height: 50px; margin-right: 15px;" />';
+                echo '<img src="' . $row['link'] . '" class="mr-3 rounded d-block" alt="Profile Photo" style="width: 50px; height: 50px; margin-right: 15px;" />';
                 echo '<div>';
                 echo '<h5 class="mt-0 mb-0">' . $row['userName'] . '</h5>';
                 echo '<div class="rating">';

@@ -1,3 +1,24 @@
+.page-footer {
+  background-color: #333;  /* Change this to your desired background color */
+  color: #fff;  /* Change this to your desired text color */
+  text-align: center;
+  padding: 15px 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  margin-top: 10%;
+}
+
+.page-footer a {
+  color: #fff;  /* Change this to your desired link color */
+  text-decoration: none;
+}
+
+.page-footer a:hover {
+  text-decoration: underline;
+}
+
+
 #navbar-right {
   justify-content: flex-end;
   margin-left: 35rem;
@@ -212,6 +233,12 @@
     font-size: 2rem;
   }
 
+  .rating__label_review {
+    cursor: pointer;
+    padding: 0 0.1em;
+    font-size: 1.5rem;
+  }
+
   /* set default star color */
   .rating__icon--star {
     color: orange;
@@ -227,8 +254,16 @@
     color: red;
   }
 
+  .rating__input--none:checked + .rating__label_review .rating__icon--none {
+    color: red;
+  }
+
   /* if any input is checked, make its following siblings grey */
   .rating__input:checked ~ .rating__label .rating__icon--star {
+    color: #ddd;
+  }
+
+  .rating__input:checked ~ .rating__label_review .rating__icon--star {
     color: #ddd;
   }
 
@@ -237,8 +272,16 @@
     color: orange;
   }
 
+  .rating-group:hover .rating__label_review .rating__icon--star {
+    color: orange;
+  }
+
   /* make hovered input's following siblings grey on hover */
   .rating__input:hover ~ .rating__label .rating__icon--star {
+    color: #ddd;
+  }
+
+  .rating__input:hover ~ .rating__label_review .rating__icon--star {
     color: #ddd;
   }
 
@@ -252,6 +295,10 @@
 
   /* make none icon red on hover */
   .rating__input--none:hover + .rating__label .rating__icon--none {
+    color: red;
+  }
+
+  .rating__input--none:hover + .rating__label_review .rating__icon--none {
     color: red;
   }
 }
