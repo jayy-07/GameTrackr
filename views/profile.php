@@ -228,9 +228,9 @@
     }, function(data) {
       if (data.status === 'success') {
         $('#password-error-message').text('');
-        $('#username-success-message').text("Your password has been updated");
+        $('#password-success-message').text("Your password has been updated");
       } else {
-        $('#username-success-message').text("");
+        $('#password-success-message').text("");
         $('#password-error-message').text(data.message);
       }
     }, 'json');
