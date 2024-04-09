@@ -1,17 +1,14 @@
-
 <?php
 include '../settings/connection.php';
 include '../settings/core.php';
-$userID = $_SESSION['user_id']; 
+$userID = $_SESSION['user_id'];
 
-// Get the selected avatar and bio from the form
+// Get the selected avatar from the AJAX request
 $selectedAvatar = $_POST['selectedAvatar'];
-$bio = $_POST['bio'];
 
 // Initialize avatarID to 1 (default avatar)
 $avatarID = 1;
 
-$_SESSION['avatarID'] = $selectedAvatar;
 // If the selected avatar is not the default, get the avatarID from the database
 if ($selectedAvatar != "../images/no_profile_image.png" && $selectedAvatar != null) {
     $sql = "SELECT avatarID FROM avatars WHERE link = ?";
@@ -25,20 +22,14 @@ if ($selectedAvatar != "../images/no_profile_image.png" && $selectedAvatar != nu
     }
 }
 
-// Insert the avatarID into the useravatar table
-$sql = "INSERT INTO useravatar (userID, avatarID) VALUES (?, ?)";
+// Update the avatarID in the useravatar table
+$sql = "UPDATE useravatar SET avatarID = ? WHERE userID = ?";
 $stmt = $db->prepare($sql);
-$stmt->bind_param("ii", $userID, $avatarID);
-$stmt->execute();
-
-// Insert the bio into the bios table
-$sql = "INSERT INTO bios (userID, bio) VALUES (?, ?)";
-$stmt = $db->prepare($sql);
-$stmt->bind_param("is", $userID, $bio);
-$stmt->execute();
-$_SESSION['bio'] = $bio;
-
-// Redirect to the dashboard
-header("Location: ../views/dashboard.php");
-exit();
+$stmt->bind_param("ii", $avatarID, $userID);
+if ($stmt->execute()) {
+    echo json_encode(['status' => 'success']);
+    $_SESSION['avatarID'] = $selectedAvatar;
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Failed to update avatar']);
+}
 ?>

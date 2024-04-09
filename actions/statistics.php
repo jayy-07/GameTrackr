@@ -1,6 +1,6 @@
 <?php
 include '../settings/connection.php';
-$userID = 1; 
+$userID = $_SESSION['user_id']; 
 
 // SQL queries
 $sql_played = "SELECT COUNT(*) as count FROM usergames WHERE statusID = 1 AND userID = $userID";

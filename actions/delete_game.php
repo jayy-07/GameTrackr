@@ -1,6 +1,6 @@
 <?php
     include '../settings/connection.php';
-
+    include '../settings/core.php'; 
     // Get the gameID and userID from the AJAX request
     $gameID = $_POST['gameID'];
     $userID = $_POST['userID'];

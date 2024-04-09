@@ -8,10 +8,20 @@ $errors = [];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = mysqli_real_escape_string($db, $_POST['username']);
     $email = mysqli_real_escape_string($db, filter_var($_POST['email'], FILTER_SANITIZE_EMAIL));
+    $password = $_POST['password2'];
+
+    // Validate username
+    if (!preg_match('/^\w[\w.]{1,28}[\w]$/', $username)) {
+        $errors[] = "Invalid input detected";
+    }
 
     // Validate email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Invalid email format";
+        $errors[] = "Invalid input detected";
+    }
+    // Validate password
+    if (!preg_match('/^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/', $password)) {
+        $errors[] = "Invalid input detected";
     }
 
     // Check if email already exists in the database
@@ -25,7 +35,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors[] = "Email already exists.";
     }
 
-    $password = $_POST['password2'];
+    $query = "SELECT * FROM users WHERE userName = ?";
+    $stmt = $db->prepare($query);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $errors[] = "Username has already been taken.";
+    }
+
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     if (empty($errors)) {
@@ -37,13 +56,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($stmt->execute()) {
             $userID = mysqli_insert_id($db);
             $_SESSION['user_id'] = $userID;
-            header('Location: ../login/setup.php');
+            $_SESSION['user_name'] = $username;
+            $_SESSION['email'] = $email;
             exit();
         } else {
             $errors[] = "Error: " . $stmt->error;
         }
     }
 
-    $_SESSION['register_errors'] = $errors;
-    $_SESSION['email_value'] = $email;
+    if (!empty($errors)) {
+        echo implode('<br>', $errors);
+    }
 }

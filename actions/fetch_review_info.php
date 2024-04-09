@@ -1,7 +1,7 @@
 <?php
 
 include '../settings/connection.php';
-
+include '../settings/core.php';
 $userID = $_POST['userID'];
 $reviewID = $_POST['reviewID'];
 

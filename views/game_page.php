@@ -1,9 +1,9 @@
 <?php
-session_start();
+include_once '../settings/core.php';
 include_once '../settings/connection.php';
 include '../functions/show_reviews.php';
 $_POST['new'] = 1;
-$userID = 1;
+$userID = $_SESSION['user_id'];
 
 $query = "SELECT gameID FROM games WHERE guid = ?";
 $stmt = $db->prepare($query);
@@ -67,7 +67,7 @@ if ($gameID == 0) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Game Page</title>
+  <title id="headin">Game Page</title>
   <link rel="icon" type="image/x-icon" href="../images/favicon.png" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -82,25 +82,25 @@ if ($gameID == 0) {
         <ul class="navbar-nav w-100 d-flex align-items-center" id="navbar-right">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown" id="dropdown-menu">
-              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                joeyskillz
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="<?= $_SESSION['avatarID']; ?>" class="mr-3 rounded-circle d-block" alt="Profile Photo" style="width: 30px; height: 30px; margin-right: 15px;" />
+                <?= $_SESSION['user_name']; ?>
               </a>
               <div class="dropdown-menu" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">Profile</a>
+                <a class="dropdown-item" href="profile.php">Profile</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="dashboard.php">Dashboard</a>
                 <a class="dropdown-item" href="games.php?status=1">Played</a>
                 <a class="dropdown-item" href="games.php?status=2">Playing</a>
                 <a class="dropdown-item" href="games.php?status=3">Backlog</a>
                 <a class="dropdown-item" href="games.php?status=4">Wishlist</a>
-                <a class="dropdown-item" href="friends.php">Friends</a>
-                <a class="dropdown-item" href="#">Reviews</a>
+                <a class="dropdown-item" href="reviews.php">Reviews</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Log Out</a>
+                <a class="dropdown-item" href="../login/logout.php">Log Out</a>
               </div>
             </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0 d-flex" method="post" action="../views/search.php">
+          <form class="form-inline my-2 my-lg-0 d-flex" method="get" action="../views/search.php">
             <input id="search-input" class="form-control me-2" type="search" name="query" placeholder="Search for games" aria-label="Search" />
             <button id="search-btn" class="btn" type="submit">Search</button>
           </form>
@@ -209,8 +209,9 @@ if ($gameID == 0) {
       </div>
     </div>
   </div>
-
-
+  <footer class="page-footer navbar-expand-lg navbar-dark bg-dark">
+    <p>Powered by <a href="https://www.giantbomb.com/" target="_blank">GiantBomb</a></p>
+  </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
@@ -231,6 +232,7 @@ if ($gameID == 0) {
           gameImage = data.results.image.medium_url;
           $('#cover-image').attr('src', data.results.images[1]?.original || data.results.images[0].original);
           $('#title').text(data.results.name);
+          $(document).prop('title', data.results.name + " by " + data.results.publishers[0].name);
           gameName = data.results.name;
           $('#publisher').text(data.results.publishers[0].name);
           gamePublisher = data.results.publishers[0].name;
@@ -271,7 +273,7 @@ if ($gameID == 0) {
 
       $('#delete-div').on('click', '#delete-button', function() {
         var gameID = '<?= $gameID ?>';
-        var userID = 1;
+        var userID = '<?= $userID ?>';
 
         $.ajax({
           url: '../actions/delete_game.php',
@@ -301,7 +303,7 @@ if ($gameID == 0) {
             'status': status,
             'guid': guid,
             'gameName': gameName,
-            'gameImage':gameImage,
+            'gameImage': gameImage,
             'gamePublisher': gamePublisher
           },
           success: function(response) {
@@ -324,7 +326,7 @@ if ($gameID == 0) {
       });
 
       var gameID = '<?= $gameID ?>';
-      var userID = 1;
+      var userID = <?= $userID ?>;
       var guid = '<?= $_GET["guid"] ?>';
 
 
@@ -337,7 +339,7 @@ if ($gameID == 0) {
             userID: userID,
             'guid': guid,
             'gameName': gameName,
-            'gameImage':gameImage,
+            'gameImage': gameImage,
             'gamePublisher': gamePublisher
           },
           success: function updateButton(data) {
@@ -375,12 +377,19 @@ if ($gameID == 0) {
             'userID': userID,
             'guid': guid,
             'gameName': gameName,
-            'gameImage':gameImage,
+            'gameImage': gameImage,
             'gamePublisher': gamePublisher
           },
           success: function(response) {
-            $('#alert').html('<div class="alert alert-dismissible alert-success" role="alert">' + response + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+            var alertElement = $('<div class="alert alert-dismissible alert-success" role="alert">' + response + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+            $('#alert').append(alertElement);
+
+            // Set a timeout to remove the alert after 5 seconds
+            setTimeout(function() {
+              alertElement.remove();
+            }, 5000); // 5000 milliseconds = 5 seconds
           }
+
         });
       });
 
@@ -406,11 +415,17 @@ if ($gameID == 0) {
             'userID': userID,
             'guid': guid,
             'gameName': gameName,
-            'gameImage':gameImage,
+            'gameImage': gameImage,
             'gamePublisher': gamePublisher
           },
           success: function(response) {
-            $('#alert').html('<div class="alert alert-dismissible alert-success" role="alert">' + response + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+            var alertElement = $('<div class="alert alert-dismissible alert-success" role="alert">' + response + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+            $('#alert').append(alertElement);
+
+            // Set a timeout to remove the alert after 5 seconds
+            setTimeout(function() {
+              alertElement.remove();
+            }, 5000); // 5000 milliseconds = 5 seconds
           }
         });
       });
@@ -431,6 +446,9 @@ if ($gameID == 0) {
       ].join('')
 
       alertPlaceholder.append(wrapper)
+      setTimeout(function() {
+        wrapper.remove();
+      }, 5000);
     }
   </script>
 </body>

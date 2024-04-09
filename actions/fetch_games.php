@@ -1,12 +1,12 @@
 <?php
 include '../settings/connection.php';
-
+include '../settings/core.php';
 $statusID = $_POST['statusID'];
 $userID = $_POST['userID'];
 
 
 if ($statusID == 4) {
-    $sql = "SELECT g.gameID, g.guid, g.name, g.image 
+    $sql = "SELECT g.gameID, g.guid, g.name, g.image , g.publisher
         FROM games g
         INNER JOIN wishlists w ON g.gameID = w.gameID
         WHERE w.userID = ?";

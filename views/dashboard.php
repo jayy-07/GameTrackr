@@ -1,4 +1,5 @@
 <?php
+include '../settings/core.php';
 include '../actions/statistics.php';
 ?>
 <!DOCTYPE html>
@@ -8,7 +9,7 @@ include '../actions/statistics.php';
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GameTrackr Dashboard</title>
+  <title>Dashboard</title>
   <link rel="icon" type="image/x-icon" href="../images/favicon.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
   <link href="../css/home.css" rel="stylesheet" />
@@ -22,25 +23,25 @@ include '../actions/statistics.php';
         <ul class="navbar-nav w-100 d-flex align-items-center" id="navbar-right">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown" id="dropdown-menu">
-              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                joeyskillz
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="<?= $_SESSION['avatarID']; ?>" class="mr-3 rounded-circle d-block" alt="Profile Photo" style="width: 30px; height: 30px; margin-right: 15px;" />
+                <?= $_SESSION['user_name']; ?>
               </a>
               <div class="dropdown-menu" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">Profile</a>
+                <a class="dropdown-item" href="profile.php">Profile</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="dashboard.php">Dashboard</a>
                 <a class="dropdown-item" href="games.php?status=1">Played</a>
                 <a class="dropdown-item" href="games.php?status=2">Playing</a>
                 <a class="dropdown-item" href="games.php?status=3">Backlog</a>
                 <a class="dropdown-item" href="games.php?status=4">Wishlist</a>
-                <a class="dropdown-item" href="friends.php">Friends</a>
                 <a class="dropdown-item" href="reviews.php">Reviews</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="../login/logout.php">Log Out</a>
               </div>
             </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0 d-flex" method="post" action="../views/search.php">
+          <form class="form-inline my-2 my-lg-0 d-flex" method="get" action="../views/search.php">
             <input id="search-input" class="form-control me-2" type="search" name="query" placeholder="Search for games" aria-label="Search" />
             <button id="search-btn" class="btn" type="submit">Search</button>
           </form>
@@ -127,7 +128,7 @@ include '../actions/statistics.php';
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
-    $("#loading").show();
+    $("#loading").hide();
     $(document).ready(function() {
       function fetchGames(statusID, userID) {
         $('#games-container').empty();
@@ -141,7 +142,7 @@ include '../actions/statistics.php';
           },
           success: function(data) {
             //console.log(data);
-            if (data.length == null) {
+            if (data.length == 0) {
               console.log(0);
               $('#message-container').show();
               $('#message-container').html('<p>No games yet.</p>');
@@ -182,7 +183,7 @@ include '../actions/statistics.php';
         });
       }
 
-      fetchGames(5, 1);
+      fetchGames(5, <?= $_SESSION['user_id'] ?>);
 
 
     });

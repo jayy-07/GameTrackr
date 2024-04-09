@@ -1,62 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php include '../settings/core.php'; ?>
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Game Collection</title>
+  <title>Search results for "<?php echo $_GET['query']; ?>"</title>
   <link rel="icon" type="image/x-icon" href="../images/favicon.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
   <link href="../css/home.css" rel="stylesheet" />
-  <style>
-    #search-link {
-      text-decoration: none;
-      color: black;
-    }
-
-    .search-item {
-      display: flex;
-      align-items: center;
-      border: 1px solid #ddd;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      transition: all 0.3s ease;
-    }
-
-    .search-item:hover {
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .search-game-cover {
-      width: 100px;
-      height: 140px;
-      object-fit: cover;
-      margin-right: 30px;
-      border-radius: 5px;
-    }
-
-    .game-info p {
-      margin: 0;
-    }
-
-    .game-info p:first-child {
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    #loadMore {
-      margin-left: 45%;
-      border: 2px solid transparent;
-      padding: 8px 15px;
-      margin-right: 10px;
-      font-weight: bold;
-      transition: background-color 0.3s, border-color 0.3s;
-      background-color: #ff0000;
-      color: white;
-      border-radius: 5px;
-    }
-  </style>
 </head>
 
 <body>
@@ -67,25 +19,25 @@
         <ul class="navbar-nav w-100 d-flex align-items-center" id="navbar-right">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown" id="dropdown-menu">
-              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                joeyskillz
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="<?= $_SESSION['avatarID']; ?>" class="mr-3 rounded-circle d-block" alt="Profile Photo" style="width: 30px; height: 30px; margin-right: 15px;" />
+                <?= $_SESSION['user_name']; ?>
               </a>
               <div class="dropdown-menu" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">Profile</a>
+                <a class="dropdown-item" href="profile.php">Profile</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="dashboard.php">Dashboard</a>
                 <a class="dropdown-item" href="games.php?status=1">Played</a>
                 <a class="dropdown-item" href="games.php?status=2">Playing</a>
                 <a class="dropdown-item" href="games.php?status=3">Backlog</a>
                 <a class="dropdown-item" href="games.php?status=4">Wishlist</a>
-                <a class="dropdown-item" href="friends.php">Friends</a>
-                <a class="dropdown-item" href="#">Reviews</a>
+                <a class="dropdown-item" href="reviews.php">Reviews</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Log Out</a>
+                <a class="dropdown-item" href="../login/logout.php">Log Out</a>
               </div>
             </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0 d-flex" method="post" action="../views/search.php">
+          <form class="form-inline my-2 my-lg-0 d-flex" method="get" action="../views/search.php">
             <input id="search-input" class="form-control me-2" type="search" name="query" placeholder="Search for games" aria-label="Search" />
             <button id="search-btn" class="btn" type="submit">Search</button>
           </form>
@@ -97,12 +49,12 @@
   <div style="font-family: Bahnschrift" class="container mt-4">
     <h2>Search</h2>
     <div id="game-number">
-      <p>Search results for "<?= htmlspecialchars($_POST['query']); ?>"</p>
+      <p>Search results for "<?= htmlspecialchars($_GET['query']); ?>"</p>
       <span id="resultsLength"></span>
 
     </div>
     <div style="display: flex; justify-content: center; align-items: center; height: 50vh;" id="loading">
-      <div class="spinner-border m-5" role="status" >
+      <div class="spinner-border m-5" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
@@ -112,6 +64,9 @@
     <div id="results"></div>
     <button id="loadMore">Load More</button>
   </div>
+  <footer class="page-footer navbar-expand-lg navbar-dark bg-dark">
+    <p>Powered by <a href="https://www.giantbomb.com/" target="_blank">GiantBomb</a></p>
+  </footer>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -129,7 +84,7 @@
   var page = 1; // Initialize page variable
 
   function loadResults() {
-    var searchTerm = '<?php echo $_POST['query']; ?>';
+    var searchTerm = '<?php echo $_GET['query']; ?>';
     var url = 'https://www.giantbomb.com/api/search/?api_key=5743a53a52963939cd8a825b048a39af6bd172a0&format=jsonp&json_callback=?&query=' + searchTerm + '&resources=game&page=' + page;
 
     // Show loading button

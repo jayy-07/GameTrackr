@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php include '../settings/core.php'; ?>
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Game Collection</title>
+  <title>Your Reviews</title>
   <link rel="icon" type="image/x-icon" href="../images/favicon.png" />
   <!-- Include Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
@@ -20,25 +21,25 @@
         <ul class="navbar-nav w-100 d-flex align-items-center" id="navbar-right">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown" id="dropdown-menu">
-              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                joeyskillz
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="<?= $_SESSION['avatarID']; ?>" class="mr-3 rounded-circle d-block" alt="Profile Photo" style="width: 30px; height: 30px; margin-right: 15px;" />
+                <?= $_SESSION['user_name']; ?>
               </a>
               <div class="dropdown-menu" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">Profile</a>
+                <a class="dropdown-item" href="profile.php">Profile</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="dashboard.php">Dashboard</a>
                 <a class="dropdown-item" href="games.php?status=1">Played</a>
                 <a class="dropdown-item" href="games.php?status=2">Playing</a>
                 <a class="dropdown-item" href="games.php?status=3">Backlog</a>
                 <a class="dropdown-item" href="games.php?status=4">Wishlist</a>
-                <a class="dropdown-item" href="friends.php">Friends</a>
-                <a class="dropdown-item" href="reviews.php">My Reviews</a>
+                <a class="dropdown-item" href="reviews.php">Reviews</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Log Out</a>
+                <a class="dropdown-item" href="../login/logout.php">Log Out</a>
               </div>
             </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0 d-flex" method="post" action="../views/search.php">
+          <form class="form-inline my-2 my-lg-0 d-flex" method="get" action="../views/search.php">
             <input id="search-input" class="form-control me-2" type="search" name="query" placeholder="Search for games" aria-label="Search" />
             <button id="search-btn" class="btn" type="submit">Search</button>
           </form>
@@ -61,7 +62,7 @@
         <div class="modal-header">
           <h5 class="modal-title" id="editReviewModalLabel">Edit Your Review</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
+            <span aria-hidden="true"></span>
           </button>
         </div>
         <div class="modal-body">
@@ -107,12 +108,15 @@
   </div>
 
 </body>
+<footer class="page-footer navbar-expand-lg navbar-dark bg-dark">
+  <p>Powered by <a href="https://www.giantbomb.com/" target="_blank">GiantBomb</a></p>
+</footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
   $(document).ready(function() {
     $('#review-container').on('click', '.btn-primary', function() {
-      var userID = 1;
+      var userID = <?= $_SESSION['user_id'] ?>;
       var reviewID = $(this).data('review-id');
       console.log(reviewID);
 
@@ -134,7 +138,7 @@
     });
 
     $('#review-container').on('click', '.btn-danger', function() {
-      var userID = 1;
+      var userID = <?= $_SESSION['user_id'] ?>;
       var reviewID = $(this).data('review-id');
       $('#deleteReviewModal').data('review-id', reviewID);
       console.log(reviewID);
@@ -187,7 +191,7 @@
       });
     });
 
-    
+
   });
 </script>
 

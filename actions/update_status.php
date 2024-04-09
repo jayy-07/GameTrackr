@@ -1,8 +1,8 @@
 <?php
 include '../settings/connection.php';
-//include '../settings/core.php';
-session_start();
-$userID = 1;
+include '../settings/core.php';
+
+$userID = $_SESSION['user_id'];
 $gameID = $_SESSION['gameID'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['status'], $_POST['guid'])) {

@@ -1,6 +1,6 @@
 <?php
 include '../settings/connection.php';
-session_start();
+include '../settings/core.php';
 $userID = $_POST['userID'];
 $gameID = $_SESSION['gameID'];
 $guid = $_POST['guid'];

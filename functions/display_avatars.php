@@ -1,6 +1,7 @@
 <?php
 include "../settings/connection.php";
 
+
 $sql = "SELECT * FROM avatars WHERE NOT avatarID = 1";
 $result = $db->query($sql);
 

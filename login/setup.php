@@ -14,7 +14,7 @@
 
 <body>
   <div class="container" id="setup-page">
-    <div class="navbar-brand font-weight-bold" style="margin-left: 37%; margin-bottom: 25px" id="logo-text" href="dashboard.html">
+    <div class="navbar-brand font-weight-bold" style="margin-left: 37%; margin-bottom: 25px" id="logo-text">
       gametrackr
     </div>
 
@@ -25,7 +25,7 @@
           <label for="avatar" class="form-label">Select an Avatar</label>
           <div class="row-cols-auto" id="avatar-selection">
             <?php include "../functions/display_avatars.php"; ?>
-            <img class="avatar-option mr-3 rounded-circle" id="avatar-option" src="../img/no_profile_image.png" alt="No image">
+            <img class="avatar-option mr-3 rounded-circle" id="avatar-option" src="../images/no_profile_image.png" alt="No image">
           </div>
           <input type="hidden" id="selected-avatar" name="selectedAvatar" required />
         </div>
@@ -41,7 +41,7 @@
     </div>
   </div>
 
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
     $('.avatar-option').click(function() {

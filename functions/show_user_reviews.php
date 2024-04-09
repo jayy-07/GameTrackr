@@ -1,8 +1,9 @@
 <?php
 
 include '../settings/connection.php';
+include_once '../settings/core.php';
 
-$userID = 1;
+$userID = $_SESSION['user_id'];
 
 // Prepare the SQL statement
 $sql = "SELECT reviews.reviewID, games.name, games.image, games.guid, reviews.reviewText, reviews.rating, reviews.reviewDate 
