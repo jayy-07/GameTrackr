@@ -4,7 +4,7 @@ function showReviews($gameID)
     if ($gameID == 0) {
         echo "No reviews available";
     } else {
-        global $db; // Use the $conn from the included connection file
+        global $db;  
 
         // Prepare the SQL statement
         $sql = "SELECT users.userName, avatars.link, reviews.reviewText, reviews.rating, reviews.reviewDate 

@@ -126,6 +126,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
 
 #password-success-message, #email-success-message, #username-success-message, #bio-success-message{

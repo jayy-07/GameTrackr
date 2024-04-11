@@ -2,6 +2,8 @@
 
 include '../settings/connection.php';
 include '../settings/core.php';
+
+//Get the POST data
 $userID = $_POST['userID'];
 $reviewID = $_POST['reviewID'];
 

@@ -36,7 +36,7 @@
         <div id="error-message">
 
         </div>
-        <button type="submit" class="btn" id="signin-btn">Submit</button>
+        <button type="submit" class="btn" id="signin-btn">Done</button>
       </form>
     </div>
   </div>

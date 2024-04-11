@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $errors[] = "Email already exists.";
+        $errors[] = "Email already exists<br>";
     }
 
     $query = "SELECT * FROM users WHERE userName = ?";
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $errors[] = "Username has already been taken.";
+        $errors[] = "Username has already been taken<br>";
     }
 
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);

@@ -65,9 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             exit();
         } else {
-            echo "Incorrect password";
+            echo "Incorrect password<br>";
         }
     } else {
-        echo "Username does not exist";
+        echo "Username does not exist<br>";
     }
 }

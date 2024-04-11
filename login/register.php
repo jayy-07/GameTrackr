@@ -51,7 +51,7 @@
         var password = document.getElementById("password").value;
         var confirmPassword = document.getElementById("confirm-password").value;
         if (password != confirmPassword) {
-          document.getElementById("error-message").innerHTML = "Passwords do not match</br>";
+          document.getElementById("error-message").innerHTML = "Passwords do not match";
           e.preventDefault(); // Prevent form submission
           return false;
         }
@@ -63,6 +63,7 @@
           data: $(this).serialize(),
           success: function(data) {
             if (data) {
+              $('#error-message').empty();
               $('#error-message').append(data);
             } else {
               window.location.href = '../login/setup.php';
