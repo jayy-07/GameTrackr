@@ -121,14 +121,14 @@
   pointer-events: none;
 }
 
-#error-message,  #password-error-message, #password-error-message, #username-error-message, #bio-error-message{
+#error-message,  #password-error-message, #password-error-message, #username-error-message, #email-error-messag ,#bio-error-message{
   color: red;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-#password-success-message, #password-success-message, #username-success-message, #bio-success-message{
+#password-success-message, #email-success-message, #username-success-message, #bio-success-message{
   color: green;
   display: flex;
   justify-content: center;

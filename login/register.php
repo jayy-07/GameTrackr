@@ -18,14 +18,14 @@
 
     <div class="container signin-container">
       <h4 class="mb-4">Register</h4>
-      <form id="register-form" method="post" onsubmit="return validateForm()">
+      <form id="register-form" method="post">
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
           <input type="text" name="username" ; class="form-control" id="username" maxlength="30" required pattern="^[\w](?!.*?\.{2})[\w.]{1,28}[\w]$" placeholder="Enter your username" oninvalid="setCustomValidity('Usernames can only include letters, numbers, underscores and full stops within.')" oninput="setCustomValidity('')" />
         </div>
         <div class="mb-3">
           <label for="email" class="form-label">Email Address</label>
-          <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email address" required pattern="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$" />
+          <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email address" required />
         </div>
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>

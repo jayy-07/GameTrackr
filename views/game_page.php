@@ -155,7 +155,7 @@ if ($gameID == 0) {
         $result = $db->query("SELECT * FROM wishlists WHERE userID = '$userID' AND gameID = '$gameID'");
         if ($result->num_rows > 0) {
           echo '<button class="btn btn-outline-danger mt-3 active" id="wishlist" style="display: flex; justify-content: center; width: 100%;">
-            🗑️ Remove from Wishlist
+            🚫 Remove from Wishlist
           </button>';
         } else {
           echo '<button class="btn btn-outline-danger mt-3" id="wishlist" style="display: flex; justify-content: center; width: 100%;">
@@ -344,7 +344,7 @@ if ($gameID == 0) {
           },
           success: function updateButton(data) {
             if (data == "added") {
-              $('#wishlist').text('🗑️ Remove from Wishlist');
+              $('#wishlist').text('🚫 Remove from Wishlist');
               $('#wishlist').addClass('active');
               appendAlert('Added to your wishlist', 'success');
             } else {

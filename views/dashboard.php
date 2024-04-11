@@ -128,7 +128,7 @@ include '../actions/statistics.php';
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
-    $("#loading").hide();
+    $("#loading").show();
     $(document).ready(function() {
       function fetchGames(statusID, userID) {
         $('#games-container').empty();
@@ -144,6 +144,7 @@ include '../actions/statistics.php';
             //console.log(data);
             if (data.length == 0) {
               console.log(0);
+              $("#loading").hide();
               $('#message-container').show();
               $('#message-container').html('<p>No games yet.</p>');
             } else {

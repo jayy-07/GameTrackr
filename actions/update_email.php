@@ -27,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt = $db->prepare($query);
         $stmt->bind_param("si", $email, $userID);
         $stmt->execute();
+        $_SESSION['email'] = $email;
 
         echo json_encode(['status' => 'success']);
     }

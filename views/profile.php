@@ -61,7 +61,7 @@
       <div class="col-2 d-flex flex-column align-items-center" style="margin-right: 5%;">
         <img class="avatar" id="avatar" src="<?= $_SESSION['avatarID']; ?>" alt="Avatar" data-bs-toggle="modal" data-bs-target="#avatarModal">
         <br><br>
-        <h4 id="username"><?= $_SESSION['user_name']; ?></h4>
+        <h4 id="username-text"><?= $_SESSION['user_name']; ?></h4>
       </div>
 
       <div class="col-8">
@@ -88,7 +88,7 @@
           <textarea id="bio-input" class="form-control" placeholder="Bio" maxlength="200"><?= $_SESSION['bio']; ?></textarea>
           <br>
           <p class="mb-3" id="bio-error-message"></p>
-          <p class="mb-3" id="bio-error-message"></p>
+          <p class="mb-3" id="bio-success-message"></p>
           <button class="btn btn-primary" id="change-bio-btn">Change Bio</button>
           <hr>
         </div>
@@ -173,6 +173,7 @@
         $('#username-error-message').text('');
         $('#username-success-message').text("Your username has been updated");
         $('#username').text(username);
+        $('#username-text').text(username);
       } else {
         $('#username-success-message').text("");
         $('#username-error-message').text(data.message);
@@ -204,7 +205,7 @@
     }, function(data) {
       if (data.status === 'success') {
         $('#bio-error-message').text('');
-        $('#bio-success-message').text("Your bio has been updated");
+        $('#bio-success-message').text(data.message);
       } else {
         $('#bio-error-message').text(data.message);
         $('#bio-success-message').text("");

@@ -12,7 +12,7 @@ function showReviews($gameID)
         JOIN users ON reviews.userID = users.userID 
         JOIN useravatar ON users.userID = useravatar.userID 
         JOIN avatars ON useravatar.avatarID = avatars.avatarID
-        WHERE reviews.gameID = ? AND (reviews.reviewText IS NOT NULL OR reviews.rating IS NOT NULL)";
+        WHERE reviews.gameID = ? AND (reviews.reviewText IS NOT NULL OR reviews.rating IS NOT NULL) AND users.userID != ?";
 
 
         /* $sql = "SELECT users.firstname, users.lastname, userphoto.photo, reviews.ReviewText, reviews.Rating, reviews.ReviewDate 
@@ -25,7 +25,7 @@ function showReviews($gameID)
         $stmt = $db->prepare($sql);
 
         // Bind parameters
-        $stmt->bind_param("i", $gameID);
+        $stmt->bind_param("ii", $gameID, $_SESSION['user_id']);
 
         // Execute the statement
         $stmt->execute();

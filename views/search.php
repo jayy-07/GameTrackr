@@ -132,7 +132,7 @@
       error: function() {
         // Hide loading button
         $("#loading").hide();
-        alert('Error retrieving data');
+        //alert('Error retrieving data');
       }
     });
   }

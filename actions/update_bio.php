@@ -1,5 +1,4 @@
 <?php
-session_start();
 include '../settings/connection.php';
 include '../settings/core.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -9,7 +8,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt = $db->prepare($query);
     $stmt->bind_param("si", $bio, $_SESSION['user_id']);
     $stmt->execute();
+    $_SESSION['bio'] = $bio;
 
-    echo json_encode(['status' => 'success']);
+    echo json_encode(['status' => 'success', 'message' => 'Your bio has been updated']);
+}else{
+    echo json_encode(['status' => 'error','message' => 'Something went wrong']);
 }
 ?>

@@ -32,7 +32,7 @@ if (isset($_SESSION['login_error'])) {
             <form id="login-form" method="post">
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" name="username" required pattern="^[\w](?!.*?\.{2})[\w.]{1,28}[\w]$" id="username" placeholder="Enter your username" oninvalid="setCustomValidity('Usernames can only include letters, numbers, underscores and full stops.')" oninput="setCustomValidity('')">
+                    <input type="text" class="form-control" name="username" required pattern="^[\w](?!.*?\.{2})[\w.]{1,28}[\w]$" maxlength="30" minlength="3" id="username" placeholder="Enter your username" oninvalid="setCustomValidity('Usernames can only include letters, numbers, underscores and full stops.')" oninput="setCustomValidity('')">
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
