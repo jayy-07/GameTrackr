@@ -23,6 +23,8 @@ if ($selectedAvatar != "../images/no_profile_image.png" && $selectedAvatar != nu
         $row = $result->fetch_assoc();
         $avatarID = $row["avatarID"];
     }
+}else{
+    $_SESSION['avatarID'] = "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
 }
 
 // Insert the avatarID into the useravatar table

@@ -1,3 +1,17 @@
+<?php
+
+session_start();
+
+$validation_error = "";
+$email_value = '';
+
+if (isset($_SESSION['login_error'])) {
+    $validation_error = $_SESSION['login_error'];
+    $email_value = $_SESSION['user_value'];
+    unset($_SESSION['login_error']);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

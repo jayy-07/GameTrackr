@@ -137,6 +137,10 @@
     $('.avatar-option').css('filter', 'brightness(100%)');
     $(this).css('filter', 'brightness(50%)');
     imgSrc = $(this).attr('src');
+    //console.log(imgSrc);
+    if (imgSrc == "../images/no_profile_image.png"){
+      imgSrc = "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+    }
     $('#selected-avatar').val(imgSrc);
   });
 

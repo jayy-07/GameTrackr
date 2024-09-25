@@ -64,7 +64,7 @@
     <div id="results"></div>
     <button id="loadMore">Load More</button>
   </div>
-  <footer class="page-footer navbar-expand-lg navbar-dark bg-dark">
+  <footer id="#footer" class="page-footer navbar-expand-lg navbar-dark bg-dark">
     <p>Powered by <a href="https://www.giantbomb.com/" target="_blank">GiantBomb</a></p>
   </footer>
 </body>
@@ -84,8 +84,9 @@
   var page = 1; // Initialize page variable
 
   function loadResults() {
-    var searchTerm = '<?php echo $_GET['query']; ?>';
-    var url = 'https://www.giantbomb.com/api/search/?api_key=5743a53a52963939cd8a825b048a39af6bd172a0&format=jsonp&json_callback=?&query=' + searchTerm + '&resources=game&page=' + page;
+    var searchTerm = '<?php echo addslashes($_GET['query']); ?>';
+    var encodedSearchTerm = encodeURIComponent(searchTerm);
+    var url = 'https://www.giantbomb.com/api/search/?api_key=5743a53a52963939cd8a825b048a39af6bd172a0&format=jsonp&json_callback=?&query=' + encodedSearchTerm + '&resources=game&page=' + page;
 
     // Show loading button
     $("#loading").show();
@@ -132,7 +133,7 @@
       error: function() {
         // Hide loading button
         $("#loading").hide();
-        //alert('Error retrieving data');
+        $('#results').append('Error retrieving data');
       }
     });
   }

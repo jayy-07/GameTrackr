@@ -20,6 +20,9 @@ if ($selectedAvatar != "../images/no_profile_image.png" && $selectedAvatar != nu
         $row = $result->fetch_assoc();
         $avatarID = $row["avatarID"];
     }
+    $_SESSION['avatarID'] = $selectedAvatar;
+}else{
+    $_SESSION['avatarID'] = "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
 }
 
 // Update the avatarID in the useravatar table
@@ -28,7 +31,6 @@ $stmt = $db->prepare($sql);
 $stmt->bind_param("ii", $avatarID, $userID);
 if ($stmt->execute()) {
     echo json_encode(['status' => 'success']);
-    $_SESSION['avatarID'] = $selectedAvatar;
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Failed to update avatar']);
 }
